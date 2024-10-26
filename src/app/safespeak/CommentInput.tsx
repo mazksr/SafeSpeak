@@ -1,12 +1,16 @@
 "use client"
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import 'regenerator-runtime/runtime';
 import SearchButton from "@/app/components/SearchButton";
 import {usePathname, useRouter} from "next/navigation";
+import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
 
 interface Props {
     query: string
 }
+
+
 
 const CommentInput = ({query}:Props) => {
     const router = useRouter();
@@ -48,6 +52,34 @@ const CommentInput = ({query}:Props) => {
         setValue(text);
     };
 
+    const [speechRecognitionSupported, setSpeechRecognitionSupported] =
+        useState(false)
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+
+    useEffect(() => {
+        // sets to true or false after component has been mounted
+        setSpeechRecognitionSupported(browserSupportsSpeechRecognition)
+    }, [browserSupportsSpeechRecognition])
+
+    useEffect(() => {
+        setValue(transcript)
+    }, [transcript]);
+
+    if (speechRecognitionSupported === null) return null // return null on first render, can be a loading indicator
+
+    let speech_enabled: boolean;
+    if (!speechRecognitionSupported) {
+        speech_enabled = false;
+    } else {
+        speech_enabled = true;
+    }
+
     return (
         <div>
             <div className={"w-[800px] h-[270px] border-2 border-black rounded-2xl"}>
@@ -82,15 +114,23 @@ const CommentInput = ({query}:Props) => {
                                     </svg>
                                 </button>}
 
-                            <button className={"mt-4"}>
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
+                            <button
+                                className={`mt-4 ${listening && "animate-bounce animate-infinite animate-ease-out"} ${!speech_enabled && "hidden"}`}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    if (!listening) {
+                                        resetTranscript()
+                                        SpeechRecognition.startListening({language: "id"})
+                                    } else {
+                                        SpeechRecognition.stopListening()
+                                    }
+                                }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960"
+                                     width="48px" fill={!listening ? "#000000" : "#80FF00"}>
                                     <path
-                                        d="M14.3167 22.5168L25.7 29.1502M25.6833 10.8502L14.3167 17.4835M35 8.3335C35 11.0949 32.7614 13.3335 30 13.3335C27.2386 13.3335 25 11.0949 25 8.3335C25 5.57207 27.2386 3.3335 30 3.3335C32.7614 3.3335 35 5.57207 35 8.3335ZM15 20.0002C15 22.7616 12.7614 25.0002 10 25.0002C7.23858 25.0002 5 22.7616 5 20.0002C5 17.2387 7.23858 15.0002 10 15.0002C12.7614 15.0002 15 17.2387 15 20.0002ZM35 31.6668C35 34.4283 32.7614 36.6668 30 36.6668C27.2386 36.6668 25 34.4283 25 31.6668C25 28.9054 27.2386 26.6668 30 26.6668C32.7614 26.6668 35 28.9054 35 31.6668Z"
-                                        stroke="#1E1E1E" strokeWidth="4" strokeLinecap="round"
-                                        strokeLinejoin="round"/>
+                                        d="M480-423q-43 0-72-30.92-29-30.91-29-75.08v-251q0-41.67 29.44-70.83Q437.88-880 479.94-880t71.56 29.17Q581-821.67 581-780v251q0 44.17-29 75.08Q523-423 480-423Zm-30 303v-136q-106-11-178-89t-72-184h60q0 91 64.29 153t155.5 62q91.21 0 155.71-62Q700-438 700-529h60q0 106-72 184t-178 89v136h-60Z"/>
                                 </svg>
-
                             </button>
                         </div>
                     </div>

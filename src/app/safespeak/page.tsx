@@ -3,7 +3,8 @@ import Navbar from "@/app/components/Navbar";
 import CommentInput from "@/app/safespeak/CommentInput";
 import PredictOutput from "@/app/safespeak/PredictOutput";
 
-const Page = ({searchParams}: {searchParams?: { c?: string | ""; } }) => {
+const Page = async (props: {searchParams?: Promise<{ c?: string | ""; }> }) => {
+    const searchParams = await props.searchParams;
     const comment = searchParams?.c ?? "";
 
     return (

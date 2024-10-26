@@ -21,8 +21,7 @@ export default function Home() {
                     </p>
                     <Link href='/safespeak'>
                         <button
-                            className={"animate-fade-up animate-delay-[400ms] mt-20 animate-once bg-black text-white h-14 w-32 font-bold mx-3 rounded-2xl"}>Get
-                            Started
+                            className={"animate-fade-up animate-delay-[400ms] text-[#FFD4CB] bg-[#3F0F34] mt-20 animate-once h-14 w-40 font-bold mx-3 rounded-2xl"}>Mulai Prediksi
                         </button>
                     </Link>
                 </div>

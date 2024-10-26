@@ -1,8 +1,8 @@
 "use client"
 
 import React from 'react';
+import {useActionState} from "react";
 import {loginAction} from "@/app/login/LoginAction";
-import {useFormState} from "react-dom"
 import "./login.css"
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
 }
 
 function LoginForm() {
-    const [state, formAction] = useFormState(loginAction, initialState);
+    const [state, formAction] = useActionState(loginAction, initialState);
 
     return (
         <>

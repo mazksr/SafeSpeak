@@ -3,11 +3,15 @@
  import {cookies} from "next/headers";
  import {redirect} from "next/navigation";
 
- export async function loginAction(prevState: any, formData: FormData) {
+ interface State {
+        message: string,
+        success: boolean
+ }
+ export async function loginAction(prevState: State, formData: FormData) {
      const username = formData.get("username");
      const password = formData.get("password");
 
-     const post = await fetch("http://127.0.0.1:8000/login", {
+     const post = await fetch(`${process.env.API_URL}/login`, {
          method: "POST",
          headers: {
              'Content-Type': 'application/json'
@@ -19,7 +23,7 @@
      })
      const response = await post.json();
      if (post.ok) {
-         cookies().set("access_token", response.access_token)
+         (await cookies()).set("access_token", response.access_token)
          redirect("/history")
          return { message: response.message, success: true }
      } else {

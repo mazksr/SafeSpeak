@@ -48,7 +48,7 @@ const DeleteButton = ({id, komentar}: Prop) => {
                         </div>
                     </DialogTitle>
                     <DialogDescription>
-                        <p className={"text-black mt-6 ml-4"}>Hapus <b>&#34;{komentar}&#34;</b></p>
+                        <span className={"text-black mt-6 ml-4"}>Hapus <b>&#34;{komentar}&#34;</b></span>
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

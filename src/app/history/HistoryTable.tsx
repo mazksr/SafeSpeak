@@ -9,16 +9,41 @@ interface History {
     Id: number
     Komentar: string
     Sentimen: string
-    Klasifikasi: string
+    HS?: boolean
+    Abusive?: boolean
+    HS_Individual?: boolean
+    HS_Group?: boolean
+    HS_Religion?: boolean
+    HS_Race?: boolean
+    HS_Physical?: boolean
+    HS_Gender?: boolean
+    HS_Other?: boolean
+    HS_Weak?: boolean
+    HS_Moderate?: boolean
+    HS_Strong?: boolean
 }
 
-const HistoryTable = async() => {
-    const url = "http://127.0.0.1:8000/history";
+const LABEL_COLUMNS = [
+    'Ujaran Kebencian',           // Hateful Speech
+    'Bahasa Kasar',               // Abusive Language
+    'Ujaran Kebencian Individu',  // Hateful Speech Individu
+    'Ujaran Kebencian Grup',      // Hateful Speech Grup
+    'Ujaran Kebencian Berdasarkan Agama', // Hateful Speech Agama
+    'Ujaran Kebencian Berdasarkan Ras',   // Hateful Speech Ras
+    'Ujaran Kebencian Berdasarkan Fisik', // Hateful Speech Fisik
+    'Ujaran Kebencian Berdasarkan Gender', // Hateful Speech Gender
+    'Ujaran Kebencian Lainnya',     // Hateful Speech Lainnya
+    'Ujaran Kebencian Lemah',      // Hateful Speech Lemah
+    'Ujaran Kebencian Sedang',     // Hateful Speech Sedang
+    'Ujaran Kebencian Kuat'         // Hateful Speech Kuat
+];
+const HistoryTable = async () => {
+    const url = `${process.env.API_URL}/history`;
     const post = await fetch(url, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${cookies().get("access_token")?.value}`
+            "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
         },
         cache: "no-store"
     })
@@ -29,32 +54,47 @@ const HistoryTable = async() => {
             <TableHeader>
                 <TableRow className={"border-none bg-[#FFD4CB] hover:bg-[#FFD4CB]"}>
                     <TableHead className="pl-8 w-[100px] text-[#3F0F34] font-extrabold">No</TableHead>
-                    <TableHead className="text-center w-2/5 text-[#3F0F34] font-extrabold">Komentar</TableHead>
+                    <TableHead className="text-center w-2/6 text-[#3F0F34] font-extrabold">Komentar</TableHead>
                     <TableHead className="text-center text-[#3F0F34] font-extrabold">Sentimen</TableHead>
-                    <TableHead className="text-center text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
+                    <TableHead className="text-center w-2/6 text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
                     <TableHead className="text-center text-[#3F0F34] font-extrabold">Aksi</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {history ? history.map((h, i) => (
-                    <TableRow key={h.Id}>
-                        <TableCell className="font-medium pl-8">{i + 1}</TableCell>
-                        <TableCell className={"text-center"}>{h.Komentar}</TableCell>
-                        <TableCell className="text-center">{h.Sentimen}</TableCell>
-                        <TableCell className="text-center">{h.Klasifikasi}</TableCell>
-                        <TableCell className="text-center">
-                            <div className={"flex justify-center items-center"}>
-                                <div className={"mr-1"}>
-                                    <EditButton Id={h.Id} Komentar={h.Komentar} Sentimen={h.Sentimen}
-                                                Klasifikasi={h.Klasifikasi}/>
+                {history && history.map((h, i) => {
+                    const labels = [
+                        h.HS ? LABEL_COLUMNS[0] : null,
+                        h.Abusive ? LABEL_COLUMNS[1] : null,
+                        h.HS_Individual ? LABEL_COLUMNS[2] : null,
+                        h.HS_Group ? LABEL_COLUMNS[3] : null,
+                        h.HS_Religion ? LABEL_COLUMNS[4] : null,
+                        h.HS_Race ? LABEL_COLUMNS[5] : null,
+                        h.HS_Physical ? LABEL_COLUMNS[6] : null,
+                        h.HS_Gender ? LABEL_COLUMNS[7] : null,
+                        h.HS_Other ? LABEL_COLUMNS[8] : null,
+                        h.HS_Weak ? LABEL_COLUMNS[9] : null,
+                        h.HS_Moderate ? LABEL_COLUMNS[10] : null,
+                        h.HS_Strong ? LABEL_COLUMNS[11] : null
+                    ].filter(Boolean).join('  ;  ');
+                    return (
+                        <TableRow key={h.Id}>
+                            <TableCell className="font-medium pl-8">{i + 1}</TableCell>
+                            <TableCell className="text-center">{h.Komentar}</TableCell>
+                            <TableCell className="text-center">{h.Sentimen}</TableCell>
+                            <TableCell className="px-10 text-center">{labels}</TableCell>
+                            <TableCell className="text-center">
+                                <div className={"flex justify-center items-center"}>
+                                    <div className={"mr-1"}>
+                                        <EditButton history={h}/>
+                                    </div>
+                                    <div className={"ml-1"}>
+                                        <DeleteButton id={h.Id} komentar={h.Komentar}/>
+                                    </div>
                                 </div>
-                                <div className={"ml-1"}>
-                                    <DeleteButton id={h.Id} komentar={h.Komentar}/>
-                                </div>
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                )) : <TableRow/>}
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
                 <TableRow/>
             </TableBody>
 

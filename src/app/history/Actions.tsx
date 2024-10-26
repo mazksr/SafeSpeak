@@ -4,12 +4,12 @@ import {revalidatePath} from "next/cache";
 import {cookies} from "next/headers";
 
 export async function handleDelete(id: number) {
-    const URL = `http://127.0.0.1:8000/history/${id}`;
+    const URL = `${process.env.API_URL}/history/${id}`;
     const post = await fetch(URL, {
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${cookies().get("access_token")?.value}`
+            "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
         }
     })
     if (post.ok) {
@@ -18,29 +18,65 @@ export async function handleDelete(id: number) {
     }
 }
 
-export async function handleEdit(prevState: any, formData: FormData) {
-    const id = formData.get("id")
-    const komentar = formData.get("komentar")
-    const sentimen = formData.get("sentimen")
-    const klasifikasi = formData.get("hateSpeechLabels")
+interface State {
+    message: string,
+    success: boolean
+}
+export async function handleEdit(prevState: State, formData: FormData) {
+    const id = formData.get("id");
+    const komentar = formData.get("komentar");
+    const isPositive = formData.get("Sentimen") == "Positive";
 
-    const URL = `http://127.0.0.1:8000/history/${id}`;
-    const post = await fetch(URL, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${cookies().get("access_token")?.value}`
-        },
-        body: JSON.stringify({
+    let post: Response;
+    const URL = `${process.env.API_URL}/history/${id}`;
+    if (!isPositive) {
+        const sentiments = {
+            HS: !!formData.get("HS"),
+            Abusive: !!formData.get("Abusive"),
+            HS_Individual: !!formData.get("HS_Individual"),
+            HS_Group: !!formData.get("HS_Group"),
+            HS_Religion: !!formData.get("HS_Religion"),
+            HS_Race: !!formData.get("HS_Race"),
+            HS_Physical: !!formData.get("HS_Physical"),
+            HS_Gender: !!formData.get("HS_Gender"),
+            HS_Other: !!formData.get("HS_Other"),
+            HS_Weak: !!formData.get("HS_Weak"),
+            HS_Moderate: !!formData.get("HS_Moderate"),
+            HS_Strong: !!formData.get("HS_Strong")
+        };
+
+        const requestBody = {
             komentar,
-            sentimen,
-            ...(klasifikasi !== "None" && {klasifikasi})
+            is_positive: isPositive,
+            ...sentiments,
+        };
+
+        post = await fetch(URL, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
+            },
+            body: JSON.stringify(requestBody)
         })
-    })
+    } else {
+        post = await fetch(URL, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
+            },
+            body: JSON.stringify({
+                komentar,
+                is_positive: isPositive
+            })
+        })
+    }
     const response = await post.json()
     if (post.ok) {
         revalidatePath("/history")
         return {message: response.message, success: true}
     }
     return {message: response.message, success: false}
+
 }

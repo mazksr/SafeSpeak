@@ -27,7 +27,7 @@ const SearchButton = ({ comment, onClick }: Props) => {
               <title>Search Icon</title>
               <desc id="desc">A magnifying glass icon.</desc>
               <g stroke="white" fill="none" className="search-path">
-                <path d="M18.5 18.3l-5.4-5.4" stroke-linecap="square"></path>
+                <path d="M18.5 18.3l-5.4-5.4" strokeLinecap="square"></path>
                 <circle r="7" cy="8" cx="8"></circle>
               </g>
             </svg>
