@@ -9,7 +9,8 @@ export async function logOut() {
 }
 
 export async function checkLoggedIn() {
-    if (!(await cookies()).get("access_token")) {
+    const cookie = (await cookies()).get("access_token")
+    if (!cookie) {
         return {loggedIn: false, is_admin: false};
     }
 
@@ -19,7 +20,7 @@ export async function checkLoggedIn() {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
+            "Authorization": `Bearer ${cookie?.value}`
         }
     })
 
@@ -29,6 +30,7 @@ export async function checkLoggedIn() {
     } else {
         console.log("not logged in")
         console.log(post.status)
+        console.log(cookie?.value)
         return {logged_in: false}
     }
 }
