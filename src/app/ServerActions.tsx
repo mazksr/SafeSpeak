@@ -22,14 +22,12 @@ export async function checkLoggedIn() {
         }
     })
 
-    const resp = await post.json()
     if (post.ok) {
         console.log("logged in")
         return {logged_in: true}
     } else {
         console.log("not logged in")
         console.log(post.status)
-        console.log(resp.message)
         return {logged_in: false}
     }
 }
