@@ -13,9 +13,7 @@ export async function checkLoggedIn() {
     if (!cookie) {
         return {loggedIn: false};
     }
-    console.log(process.env.API_URL)
     const post = await fetch(`${process.env.API_URL}/protected`, {
-        credentials: "include",
         cache: "no-store",
         method: "GET",
         headers: {
@@ -31,7 +29,8 @@ export async function checkLoggedIn() {
     } else {
         console.log("not logged in")
         console.log(post.status)
-        console.log(cookie?.value)
+        const data = await post.json().catch(error => console.log("JSON Parse Error:", error));
+        console.log("Response data:", data);
         return {logged_in: false}
     }
 }

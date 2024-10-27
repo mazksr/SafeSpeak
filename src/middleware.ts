@@ -1,17 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import {checkLoggedIn} from "@/app/ServerActions";
-import {cookies} from "next/headers";
-
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
     const isLoggedIn = await checkLoggedIn();
-    const cookie = (await cookies()).get("access_token")
     if (!isLoggedIn.logged_in && (request.url.includes("/history"))) {
         console.log("not logged in on history")
-        console.log(isLoggedIn.logged_in)
-        console.log(`cookie on middleware: ${cookie?.value}`)
         return NextResponse.redirect(new URL("/login", request.url));
     }
     if (isLoggedIn.logged_in && (request.url.includes("/login"))) {
