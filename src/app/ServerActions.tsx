@@ -29,8 +29,7 @@ export async function checkLoggedIn() {
     } else {
         console.log("not logged in")
         console.log(post.status)
-        const data = await post.json().catch(error => console.log("JSON Parse Error:", error));
-        console.log("Response data:", data);
+        console.log("Response data:", post);
         return {logged_in: false}
     }
 }
