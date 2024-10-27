@@ -11,7 +11,7 @@ export async function logOut() {
 export async function checkLoggedIn() {
     const cookie = (await cookies()).get("access_token")
     if (!cookie) {
-        return {loggedIn: false};
+        return {logged_in: false};
     }
     const post = await fetch(`${process.env.API_URL}/protected`, {
         cache: "no-store",
