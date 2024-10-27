@@ -11,7 +11,7 @@ export async function logOut() {
 export async function checkLoggedIn() {
     const cookie = (await cookies()).get("access_token")
     if (!cookie) {
-        return {loggedIn: false, is_admin: false};
+        return {loggedIn: false};
     }
 
     const post = await fetch(`${process.env.API_URL}/protected`, {
@@ -23,6 +23,7 @@ export async function checkLoggedIn() {
             "Authorization": `Bearer ${cookie?.value}`
         }
     })
+
 
     if (post.ok) {
         console.log("logged in")
