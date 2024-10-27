@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         isLoggedIn = checkLoggedIn()
     )
 
-    const loginStatus = await isLoggedIn;
+    const loginStatus = (await isLoggedIn).logged_in;
 
     if (!loginStatus && (request.url.includes("/history"))) {
         console.log("not logged in on history")
