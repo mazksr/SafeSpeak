@@ -13,7 +13,7 @@ export async function checkLoggedIn() {
     if (!cookie) {
         return {loggedIn: false};
     }
-
+    console.log(process.env.API_URL)
     const post = await fetch(`${process.env.API_URL}/protected`, {
         credentials: "include",
         cache: "no-store",
