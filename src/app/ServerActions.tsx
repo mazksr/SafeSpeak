@@ -23,8 +23,10 @@ export async function checkLoggedIn() {
     })
 
     if (post.ok) {
+        console.log("logged in")
         return {logged_in: true}
     } else {
+        console.log("not logged in")
         return {logged_in: false}
     }
 }
