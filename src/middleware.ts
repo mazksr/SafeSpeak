@@ -1,24 +1,30 @@
 import {NextFetchEvent, NextResponse} from 'next/server'
 import type { NextRequest } from 'next/server'
-import {checkLoggedIn} from "@/app/ServerActions";
-
 
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
     let isLoggedIn;
+    const cookie = request.cookies.get("access_token")
 
     event.waitUntil(
-        isLoggedIn = checkLoggedIn()
+        isLoggedIn = fetch(`${process.env.API_URL}/protected`, {
+        cache: "no-store",
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${cookie?.value}`
+        }
+    })
     )
 
-    const loginStatus = (await isLoggedIn).logged_in;
+    const loginStatus = await isLoggedIn;
 
-    if (!loginStatus && (request.url.includes("/history"))) {
+    if (!loginStatus.ok && (request.url.includes("/history"))) {
         console.log("not logged in on history")
         return NextResponse.redirect(new URL("/login", request.url));
     }
-    if (loginStatus && (request.url.includes("/login"))) {
+    if (loginStatus.ok && (request.url.includes("/login"))) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 }
