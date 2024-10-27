@@ -14,6 +14,7 @@ export async function checkLoggedIn() {
     }
 
     const post = await fetch(`${process.env.API_URL}/protected`, {
+        credentials: "include",
         cache: "no-store",
         method: "GET",
         headers: {
