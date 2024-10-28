@@ -39,11 +39,12 @@ const LABEL_COLUMNS = [
 ];
 const HistoryTable = async () => {
     const url = `${process.env.API_URL}/history`;
+    const cookie = (await cookies()).get("access_token");
     const post = await fetch(url, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${(await cookies()).get("access_token")?.value}`
+            "Authorization": `Bearer ${cookie?.value}`
         },
         cache: "no-store"
     })

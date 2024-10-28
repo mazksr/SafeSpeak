@@ -23,7 +23,9 @@
      })
      const response = await post.json();
      if (post.ok) {
-         (await cookies()).set("access_token", response.access_token)
+         (await cookies()).set("access_token", response.access_token, {
+             domain: ".safespeak.info"
+         })
          redirect("/history")
          return { message: response.message, success: true }
      } else {
