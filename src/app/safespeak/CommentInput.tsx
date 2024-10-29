@@ -82,7 +82,7 @@ const CommentInput = ({query}:Props) => {
 
     return (
         <div>
-            <div className={"w-[500px] md:w-[800px] h-[270px] border-2 border-black rounded-2xl"}>
+            <div className={"w-[300px] sm:w-[600px] md:w-[800px] h-[270px] border-2 border-black rounded-2xl"}>
                 <form className={"h-[180px] focus:outline-none w-full rounded-2xl"}>
                     <div className={"flex justify-between w-full h-full"}>
                     <textarea value={value} onChange={(e) => setValue(e.target.value)}

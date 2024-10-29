@@ -3,6 +3,8 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import DeleteButton from "@/app/history/DeleteButton";
 import EditButton from "@/app/history/EditButton";
 import {cookies} from "next/headers";
+import ActionPopover from "@/app/history/ActionPopover";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 
 
 interface History {
@@ -54,11 +56,16 @@ const HistoryTable = async () => {
         <Table className="table-auto mt-5 overflow-y-hidden">
             <TableHeader>
                 <TableRow className={"border-none bg-[#FFD4CB] hover:bg-[#FFD4CB]"}>
-                    <TableHead className="hidden lg:table-cell pl-8 w-[100px] text-[#3F0F34] font-extrabold">No</TableHead>
+                    <TableHead
+                        className="hidden lg:table-cell pl-8 w-[100px] text-[#3F0F34] font-extrabold">No</TableHead>
                     <TableHead className="text-center w-2/6 text-[#3F0F34] font-extrabold">Komentar</TableHead>
                     <TableHead className="text-center text-[#3F0F34] font-extrabold">Sentimen</TableHead>
-                    <TableHead className="hidden md:table-cell text-center w-2/6 text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
-                    <TableHead className="text-center text-[#3F0F34] font-extrabold">Aksi</TableHead>
+                    <TableHead
+                        className="hidden sm:table-cell text-center w-2/6 text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
+                    <TableHead className="text-center text-[#3F0F34] font-extrabold">
+                        <h1 className={"hidden md:block"}>Aksi</h1>
+                        <h1 className={"md:hidden"}></h1>
+                    </TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -82,16 +89,21 @@ const HistoryTable = async () => {
                             <TableCell className="hidden lg:table-cell font-medium pl-8">{i + 1}</TableCell>
                             <TableCell className="text-center">{h.Komentar}</TableCell>
                             <TableCell className="text-center">{h.Sentimen}</TableCell>
-                            <TableCell className="hidden md:table-cell px-10 text-center">{labels}</TableCell>
-                            <TableCell className="text-center">
-                                <div className={"flex justify-center items-center"}>
-                                    <div className={"mr-1"}>
-                                        <EditButton history={h}/>
-                                    </div>
-                                    <div className={"ml-1"}>
-                                        <DeleteButton id={h.Id} komentar={h.Komentar}/>
+                            <TableCell className="hidden sm:table-cell px-10 text-center">{labels}</TableCell>
+                            <TableCell className="text-center hidden md:table-cell">
+                                <div>
+                                    <div className={"flex justify-center items-center"}>
+                                        <div className={"mr-1"}>
+                                            <EditButton history={h}/>
+                                        </div>
+                                        <div className={"ml-1"}>
+                                            <DeleteButton id={h.Id} komentar={h.Komentar}/>
+                                        </div>
                                     </div>
                                 </div>
+                            </TableCell>
+                            <TableCell className="text-center md:hidden">
+                                <ActionPopover history={h}/>
                             </TableCell>
                         </TableRow>
                     );

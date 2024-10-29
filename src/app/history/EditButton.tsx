@@ -43,11 +43,11 @@ const EditButton = (item: Prop) => {
     const [state, formAction] = useActionState(handleEdit, intialState);
     const [open, setOpen] = useState(false)
     const history = item.history
-    const [isPositive, setPositive] = useState(history.Sentimen=="Positive")
+    const [isPositive, setPositive] = useState(history.Sentimen == "Positive")
 
     useEffect(() => {
         state.message = "";
-        setPositive(history.Sentimen=="Positive")
+        setPositive(history.Sentimen == "Positive")
     }, [history.Sentimen, open, state]);
 
     return (
@@ -68,15 +68,17 @@ const EditButton = (item: Prop) => {
                     </DialogTitle>
                     <DialogDescription className={"flex justify-center items-center"}>
                         <form action={formAction} className="flex flex-col w-full">
-                            <input value={history.Id} name={"id"} className={"invisible"}/>
+                            <input defaultValue={history.Id} name={"id"} className={"invisible"}/>
                             <label htmlFor="komentar" className={"mt-2"}>Komentar:</label>
                             <textarea name="komentar" id="komentar"
                                       className="mt-1 resize-none w-full bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
-                                      placeholder="Komentar">{history.Komentar}</textarea>
+                                      placeholder="Komentar"
+                                      defaultValue={history.Komentar}/>
 
                             <label htmlFor="sentimen" className={""}>Sentimen:</label>
                             <div className={"flex items-center"}>
-                                <select id={"sentimen"} name={"Sentimen"} onChange={e => setPositive(e.target.value=="Positive")}
+                                <select id={"sentimen"} name={"Sentimen"}
+                                        onChange={e => setPositive(e.target.value == "Positive")}
                                         className="w-full mt-1 bg-white h-10 appearance-none border-2 border-gray-300 px-4">
                                     <option value={"Positive"} selected={history.Sentimen == "Positive"}>Positive
                                     </option>
@@ -105,225 +107,226 @@ const EditButton = (item: Prop) => {
                                             type="checkbox"
                                             value="None"
                                             className="checked:border-indigo-500 h-5 w-5"
-                                            checked={isPositive}
+                                            checked={isPositive} readOnly={true}
                                         />
                                     </label>
 
-                                    {!isPositive && <div className={"h-72 overflow-y-auto px-2 pt-2 grid grid-cols-2 gap-4"}>
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS"
-                                            value="HS"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS}
-                                        />
-                                    </label>
+                                    {!isPositive &&
+                                        <div className={"h-72 overflow-y-auto px-2 pt-2 grid grid-cols-2 gap-4"}>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS"
+                                                    value="HS"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS}
+                                                />
+                                            </label>
 
 
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Abusive Language </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="Abusive"
-                                            value="Abusive"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.Abusive}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Abusive Language </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="Abusive"
+                                                    value="Abusive"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.Abusive}
+                                                />
+                                            </label>
 
 
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech Targeted to an Individual </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Individual"
-                                            value="HS_Individual"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Individual}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech Targeted to an Individual </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Individual"
+                                                    value="HS_Individual"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Individual}
+                                                />
+                                            </label>
 
 
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech Targeted to a Group </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Group"
-                                            value="HS_Group"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Group}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech Targeted to a Group </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Group"
+                                                    value="HS_Group"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Group}
+                                                />
+                                            </label>
 
 
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech to Religion/Creed </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Religion"
-                                            value="HS_Religion"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Religion}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech to Religion/Creed </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Religion"
+                                                    value="HS_Religion"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Religion}
+                                                />
+                                            </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech to Race/Ethnicity </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Race"
-                                            value="HS_Race"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Race}
-                                        />
-                                    </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech to Physical/Disability </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Physical"
-                                            value="HS_Physical"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Physical}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech to Race/Ethnicity </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Race"
+                                                    value="HS_Race"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Race}
+                                                />
+                                            </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech to Gender/Sexual Orientation </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Gender"
-                                            value="HS_Gender"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Gender}
-                                        />
-                                    </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Hate Speech to Other Invective/Slander </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Other"
-                                            value="HS_Other"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Other}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech to Physical/Disability </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Physical"
+                                                    value="HS_Physical"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Physical}
+                                                />
+                                            </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Weak Hate Speech </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Weak"
-                                            value="HS_Weak"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Weak}
-                                        />
-                                    </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Moderate Hate Speech </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Moderate"
-                                            value="HS_Moderate"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Moderate}
-                                        />
-                                    </label>
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech to Gender/Sexual Orientation </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Gender"
+                                                    value="HS_Gender"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Gender}
+                                                />
+                                            </label>
 
-                                    
-                                    <label
-                                        className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
-                                    >
-                                        <div className="flex items-center space-x-5">
-                                            <div className="flex items-center">
-                                                <span> Strong Hate Speech </span>
-                                            </div>
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            name="HS_Strong"
-                                            value="HS_Strong"
-                                            className="checked:border-indigo-500 h-5 w-5"
-                                            defaultChecked={history.HS_Strong}
-                                        />
-                                    </label> </div>}
+
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Hate Speech to Other Invective/Slander </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Other"
+                                                    value="HS_Other"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Other}
+                                                />
+                                            </label>
+
+
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Weak Hate Speech </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Weak"
+                                                    value="HS_Weak"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Weak}
+                                                />
+                                            </label>
+
+
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Moderate Hate Speech </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Moderate"
+                                                    value="HS_Moderate"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Moderate}
+                                                />
+                                            </label>
+
+
+                                            <label
+                                                className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
+                                            >
+                                                <div className="flex items-center space-x-5">
+                                                    <div className="flex items-center">
+                                                        <span> Strong Hate Speech </span>
+                                                    </div>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    name="HS_Strong"
+                                                    value="HS_Strong"
+                                                    className="checked:border-indigo-500 h-5 w-5"
+                                                    defaultChecked={history.HS_Strong}
+                                                />
+                                            </label></div>}
                                 </div>
                             </div>
                             <div className={"flex justify-center items-center w-full mt-12"}>
