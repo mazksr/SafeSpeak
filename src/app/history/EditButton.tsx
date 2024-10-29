@@ -112,7 +112,7 @@ const EditButton = (item: Prop) => {
                                     </label>
 
                                     {!isPositive &&
-                                        <div className={"h-72 overflow-y-auto px-2 pt-2 grid grid-cols-2 gap-4"}>
+                                        <div className={"h-60 sm:h-72 overflow-y-auto px-2 pt-2 grid grid-cols-2 gap-4"}>
                                             <label
                                                 className="has-[:checked]:bg-white/30 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200 has-[:checked]:ring-2 cursor-pointer bg-white/40 hover:bg-white/20 w-full p-4 rounded-md flex justify-between items-center shadow"
                                             >
