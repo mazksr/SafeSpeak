@@ -1,9 +1,11 @@
 "use client"
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useActionState} from "react";
 import {loginAction} from "@/app/login/LoginAction";
 import "./login.css"
+import toast from "react-hot-toast";
+import {useRouter} from "next/navigation";
 
 const initialState = {
     success: false,
@@ -11,12 +13,27 @@ const initialState = {
 }
 
 function LoginForm() {
-    const [state, formAction] = useActionState(loginAction, initialState);
+    const [state, formAction, loading] = useActionState(loginAction, initialState);
+    const router = useRouter()
+
+    useEffect(() => {
+        if (loading) {
+            console.log("loading shown")
+            console.log(state)
+            toast.loading("Logging in...")
+        }
+        if (state.message && state.success) {
+            toast.dismiss()
+            toast.success("Logged in, redirecting...")
+            router.push("/history")
+        } else if ((state.message && !state.success) && !loading){
+            toast.dismiss()
+            toast.error("Log in failed")
+        }
+    }, [loading, state]);
 
     return (
         <>
-            <p className={state.success ? 'mb=5' : 'text-red-500 mb-5'}>{state.message}</p>
-
             <form action={formAction}>
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username_field"
                 >Username</label
@@ -37,7 +54,7 @@ function LoginForm() {
                     type="password"
                     id="password_field"
                 />
-                <button type={"submit"} className='button mt-5'>Login</button>
+                <button type={"submit"} className='button mt-5' disabled={loading}>{!loading ? "Login" : "Logging in..."}</button>
             </form>
         </>
     );

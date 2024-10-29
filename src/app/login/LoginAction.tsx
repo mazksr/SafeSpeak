@@ -1,7 +1,6 @@
  "use server"
 
  import {cookies} from "next/headers";
- import {redirect} from "next/navigation";
 
  interface State {
         message: string,
@@ -27,10 +26,9 @@
              domain: ".safespeak.info",
              secure: true
          })
-         redirect("/history")
-         return { message: response.message, success: true }
+         return { message: "success", success: true }
      } else {
-         return { message: response.message, success: false }
+         return { message: "failed", success: false }
      }
 
  }
