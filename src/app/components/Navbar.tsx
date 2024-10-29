@@ -3,6 +3,7 @@ import Link from "next/link";
 import HistoryButton from "@/app/components/HistoryButton";
 
 const Navbar = () => {
+    const repoUrl = "https://github.com/mazksr/SafeSpeak"
 
     return (
         <div className="px-14 bg-[#3F0F34] flex justify-between items-center w-screen h-14 fixed top-0 z-10">
@@ -13,9 +14,9 @@ const Navbar = () => {
                         <h1 className={"text-xl text-[#FFD4CB] font-sans"}>Speak</h1>
                     </Link>
                     <a className={"text-[#FFD4CB] font-sans ml-36 font-bold text-[12px]"}
-                       href={"/"}>About</a>
-                    <a className={"text-[#FFD4CB] font-sans ml-12 font-bold text-[12px]"}
-                       href={"/safespeak"}>Klasifikasi</a>
+                       href={repoUrl}>About</a>
+                    <Link className={"text-[#FFD4CB] font-sans ml-12 font-bold text-[12px]"}
+                       href={"/safespeak"}>Klasifikasi</Link>
                 </div>
                 <HistoryButton/>
             </div>
