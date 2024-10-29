@@ -9,7 +9,7 @@ export default function Home() {
             <div
                 className={"backgg fixed animate-ping animate-infinite animate-duration-[10000ms] animate-ease-in mt-24 left-3 w-screen h-[calc(100vh-160px)]"}/>
             <div className='flex lg:px-10 md:px-5 sm:px-5 px-5'>
-                <div className='w-fit mt-32 sm:mt-40 max-w-screen-sm bg-white'>
+                <div className='w-fit mt-20 sm:mt-40 max-w-screen-sm bg-white'>
                     <h1 className='animate-fade-down animate-duration-700 font-bold text-[#3F0F34] text-4xl'>SafeSpeak</h1>
                     <p className='animate-fade-right animate-delay-200 mt-3 text-black text-justify'>
                         Safe Speak adalah aplikasi yang dirancang untuk mendeteksi ujaran kebencian dalam teks, baik di
