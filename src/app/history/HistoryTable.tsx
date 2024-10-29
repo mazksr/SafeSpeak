@@ -4,8 +4,6 @@ import DeleteButton from "@/app/history/DeleteButton";
 import EditButton from "@/app/history/EditButton";
 import {cookies} from "next/headers";
 import ActionPopover from "@/app/history/ActionPopover";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-
 
 interface History {
     Id: number
