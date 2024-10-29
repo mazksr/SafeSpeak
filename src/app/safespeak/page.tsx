@@ -29,7 +29,7 @@ const Page = async (props: {searchParams?: Promise<{ c?: string | ""; }> }) => {
             <Navbar/>
             <div className={"mt-20"}>
                 <div className={"flex justify-center items-center"}>
-                    <div>
+                    <div className={"scale-75 sm:scale-100"}>
                         <h1 className={"mt-12 font-sans text-3xl text-[#3F0F34] font-extrabold inline-flex"}>
                             Pendeteksi Komen
                             <span
