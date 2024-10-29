@@ -2,6 +2,23 @@ import React, {Suspense} from 'react';
 import Navbar from "@/app/components/Navbar";
 import CommentInput from "@/app/safespeak/CommentInput";
 import PredictOutput from "@/app/safespeak/PredictOutput";
+import type {Metadata} from 'next'
+
+
+export async function generateMetadata(props: {searchParams?: Promise<{ c?: string | ""; }> }): Promise<Metadata> {
+        const searchParams = await props.searchParams;
+        const comment = searchParams?.c ?? "";
+
+        if (comment) {
+            return {
+                title: `Deteksi Komentar: ${comment}`
+            }
+        } else {
+            return {
+                title: `Deteksi Komentar`
+            }
+        }
+    }
 
 const Page = async (props: {searchParams?: Promise<{ c?: string | ""; }> }) => {
     const searchParams = await props.searchParams;

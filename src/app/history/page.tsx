@@ -2,6 +2,11 @@ import React from 'react';
 import Navbar from "@/app/components/Navbar";
 import HistoryTable from "@/app/history/HistoryTable";
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'SafeSpeak - History',
+}
 
 const Page = () => {
     return (
@@ -10,7 +15,7 @@ const Page = () => {
             <div className={"mt-20 mb-16"}>
                 <div className={"flex justify-end"}>
                     <a target="_blank" href={`${process.env.API_URL}/download-csv`}
-                        className="mr-24 cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:scale-110 animate-none">
+                        className="mr-4 lg:mr-24 cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:scale-110 animate-none">
                         <svg
                             className="w-5 h-5"
                             stroke="currentColor"
@@ -25,7 +30,7 @@ const Page = () => {
                         </svg>
                     </a>
                 </div>
-                <div className={"flex justify-center items-center w-full px-20"}>
+                <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
                     <HistoryTable/>
                 </div>
             </div>

@@ -51,13 +51,13 @@ const HistoryTable = async () => {
     const history: History[] = await post.json();
 
     return (
-        <Table className="table-auto mt-5">
+        <Table className="table-auto mt-5 overflow-y-hidden">
             <TableHeader>
                 <TableRow className={"border-none bg-[#FFD4CB] hover:bg-[#FFD4CB]"}>
-                    <TableHead className="pl-8 w-[100px] text-[#3F0F34] font-extrabold">No</TableHead>
+                    <TableHead className="hidden lg:table-cell pl-8 w-[100px] text-[#3F0F34] font-extrabold">No</TableHead>
                     <TableHead className="text-center w-2/6 text-[#3F0F34] font-extrabold">Komentar</TableHead>
                     <TableHead className="text-center text-[#3F0F34] font-extrabold">Sentimen</TableHead>
-                    <TableHead className="text-center w-2/6 text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
+                    <TableHead className="hidden md:table-cell text-center w-2/6 text-[#3F0F34] font-extrabold">Klasifikasi</TableHead>
                     <TableHead className="text-center text-[#3F0F34] font-extrabold">Aksi</TableHead>
                 </TableRow>
             </TableHeader>
@@ -79,10 +79,10 @@ const HistoryTable = async () => {
                     ].filter(Boolean).join('  ;  ');
                     return (
                         <TableRow key={h.Id}>
-                            <TableCell className="font-medium pl-8">{i + 1}</TableCell>
+                            <TableCell className="hidden lg:table-cell font-medium pl-8">{i + 1}</TableCell>
                             <TableCell className="text-center">{h.Komentar}</TableCell>
                             <TableCell className="text-center">{h.Sentimen}</TableCell>
-                            <TableCell className="px-10 text-center">{labels}</TableCell>
+                            <TableCell className="hidden md:table-cell px-10 text-center">{labels}</TableCell>
                             <TableCell className="text-center">
                                 <div className={"flex justify-center items-center"}>
                                     <div className={"mr-1"}>

@@ -88,7 +88,7 @@ const PredictOutput = async ({query}: Props) => {
                 </div>}
                 <div
                     className={"pl-8 py-3 flex justify-start items-center mt-8 mb-16 w-[780px] min-h-16 max-h-[270px] border-2 border-black rounded-2xl"}>
-                    <p className={"text-black min-h-2/3 max-h-60 overflow-y-scroll"}>{query}</p>
+                    <p className={"text-black min-h-2/3 max-h-60 overflow-y-scroll no-scrollbar"}>{query}</p>
                 </div>
             </div>}
         </div>

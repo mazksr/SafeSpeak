@@ -25,7 +25,7 @@
      if (post.ok) {
          (await cookies()).set("access_token", response.access_token, {
              domain: ".safespeak.info",
-             httpOnly: true
+             secure: true
          })
          redirect("/history")
          return { message: response.message, success: true }

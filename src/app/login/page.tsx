@@ -2,6 +2,12 @@ import React from 'react';
 import Navbar from "@/app/components/Navbar";
 import LoginForm from "@/app/login/LoginForm";
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'SafeSpeak - Login',
+}
+
 const Page = () => {
     return (
         <div>
