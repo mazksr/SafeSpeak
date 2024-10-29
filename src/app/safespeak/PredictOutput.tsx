@@ -46,17 +46,17 @@ const PredictOutput = async ({query}: Props) => {
 
     return (
         <div>
-            {query && <div className={"mt-6 ml-4 font-bold font-sans text-lg"}>
+            {query && <div className={"w-[280px] sm:w-[580px] md:w-[780px] mt-6 ml-4 font-bold font-sans text-lg"}>
                 {isPositive ? <p className={"text-green-500"}>Tidak Termasuk Komentar Negatif</p> : <div>
                     <p className={"text-red-500"}>Komen Negatif</p>
                     <div className={"max-w-[780px]"}>
                         <p className={"text-black"}>Klasifikasi: </p>
-                        <div className={"grid grid-cols-3 gap-4 mt-5"}>
+                        <div className={"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5"}>
                             {labels && labels.map((label, index) =>
                                 label === 1 ? (
                                     <div key={index}>
                                         <div
-                                            className="relative w-full max-w-64 h-20 flex flex-wrap items-center justify-center py-3 pl-4 pr-14 rounded-lg text-base font-medium [transition:all_0.5s_ease] border-solid border border-[#f85149] text-[#b22b2b] [&_svg]:text-[#b22b2b] group bg-[linear-gradient(#f851491a,#f851491a)]"
+                                            className="relative w-full max-w-64 h-20 flex flex-wrap items-center justify-center py-3 pl-4 pr-5 sm:pr-14 rounded-lg text-base font-medium [transition:all_0.5s_ease] border-solid border border-[#f85149] text-[#b22b2b] [&_svg]:text-[#b22b2b] group bg-[linear-gradient(#f851491a,#f851491a)]"
                                         >
                                             <p className="flex flex-row items-center mr-auto gap-x-2">
                                                 <svg
@@ -87,7 +87,7 @@ const PredictOutput = async ({query}: Props) => {
                     </div>
                 </div>}
                 <div
-                    className={"pl-8 py-3 flex justify-start items-center mt-8 mb-16 w-[780px] min-h-16 max-h-[270px] border-2 border-black rounded-2xl"}>
+                    className={"w-[280px] sm:w-[580px] md:w-[780px] pl-8 py-3 flex justify-start items-center mt-8 mb-16 min-h-16 max-h-[270px] border-2 border-black rounded-2xl"}>
                     <p className={"text-black min-h-2/3 max-h-60 overflow-y-scroll no-scrollbar"}>{query}</p>
                 </div>
             </div>}
