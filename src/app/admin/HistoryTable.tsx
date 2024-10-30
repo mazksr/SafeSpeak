@@ -68,9 +68,9 @@ const HistoryTable = async({search}: {search: string}) => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <Suspense key={history ? history.length : 0} fallback={<Loading/>}>
+            <Suspense key={search} fallback={<Loading/>}>
                 <TableBody>
-                    {history && history.map((h, i) => {
+                    {history && history.filter(h => h.Komentar==search).map((h, i) => {
                         const labels = [
                             h.HS ? LABEL_COLUMNS[0] : null,
                             h.Abusive ? LABEL_COLUMNS[1] : null,
