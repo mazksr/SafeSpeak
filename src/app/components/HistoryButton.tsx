@@ -8,7 +8,7 @@ const HistoryButton = async() => {
     return (
         <>
         {isLoggedIn.logged_in && <div className={"flex justify-center items-center"}>
-            <a className={"text-[#FFD4CB] font-bold font-sans mr-2 sm:mr-4"} href={"/history" }>History</a>
+            <a className={"text-[#FFD4CB] font-bold font-sans mr-2 sm:mr-4"} href={"/admin" }>History</a>
             <LogoutButton/>
         </div>}
         </>

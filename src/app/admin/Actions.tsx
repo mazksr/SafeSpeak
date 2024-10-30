@@ -14,7 +14,7 @@ export async function handleDelete(id: number) {
     })
     if (post.ok) {
         console.log("ehhh")
-        revalidatePath("/history")
+        revalidatePath("/admin")
     }
 }
 
@@ -74,7 +74,7 @@ export async function handleEdit(prevState: State, formData: FormData) {
     }
     const response = await post.json()
     if (post.ok) {
-        revalidatePath("/history")
+        revalidatePath("/admin")
         return {message: response.message, success: true}
     }
     return {message: response.message, success: false}

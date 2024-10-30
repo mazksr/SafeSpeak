@@ -11,7 +11,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {handleDelete} from "@/app/history/Actions";
+import {handleDelete} from "@/app/admin/Actions";
 
 interface Prop {
     id: number,

@@ -4,8 +4,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import EditButton from "@/app/history/EditButton";
-import DeleteButton from "@/app/history/DeleteButton";
+import EditButton from "@/app/admin/EditButton";
+import DeleteButton from "@/app/admin/DeleteButton";
 
 interface History {
     Id: number

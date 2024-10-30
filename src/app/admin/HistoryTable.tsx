@@ -1,9 +1,9 @@
 import React from 'react';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import DeleteButton from "@/app/history/DeleteButton";
-import EditButton from "@/app/history/EditButton";
+import DeleteButton from "@/app/admin/DeleteButton";
+import EditButton from "@/app/admin/EditButton";
 import {cookies} from "next/headers";
-import ActionPopover from "@/app/history/ActionPopover";
+import ActionPopover from "@/app/admin/ActionPopover";
 
 interface History {
     Id: number

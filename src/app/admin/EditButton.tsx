@@ -10,7 +10,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {handleEdit} from "@/app/history/Actions";
+import {handleEdit} from "@/app/admin/Actions";
 
 interface History {
     Id: number

@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from "@/app/components/Navbar";
-import HistoryTable from "@/app/history/HistoryTable";
+import HistoryTable from "@/app/admin/HistoryTable";
 
 import type { Metadata } from 'next'
 
