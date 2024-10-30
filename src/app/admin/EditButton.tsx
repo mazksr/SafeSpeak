@@ -98,9 +98,9 @@ const EditButton = (item: Prop) => {
                                 <select id={"sentimen"} name={"Sentimen"}
                                         onChange={e => setPositive(e.target.value == "Positive")}
                                         className="w-full mt-1 bg-white h-10 appearance-none border-2 border-gray-300 px-4">
-                                    <option value={"Positive"} selected={history.Sentimen == "Positive"}>Positive
+                                    <option value={"Positive"} defaultChecked={history.Sentimen == "Positive"}>Positive
                                     </option>
-                                    <option value={"Negative"} selected={history.Sentimen == "Negative"}>Negative
+                                    <option value={"Negative"} defaultChecked={history.Sentimen == "Negative"}>Negative
                                     </option>
                                 </select>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
