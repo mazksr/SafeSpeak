@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: 'SafeSpeak - History',
 }
 
-const Page = async({searchParams}: {searchParams?: { search?: string; } }) => {
-    const searchPar = await searchParams
+const Page = async(props: { searchParams?: Promise<{ search?: string | ""; }> }) => {
+    const searchPar = await props.searchParams
     const searchString = searchPar?.search || ""
 
     return (

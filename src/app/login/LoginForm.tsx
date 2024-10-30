@@ -30,7 +30,7 @@ function LoginForm() {
             toast.dismiss()
             toast.error("Log in failed")
         }
-    }, [loading, state]);
+    }, [loading, state, router]);
 
     return (
         <>

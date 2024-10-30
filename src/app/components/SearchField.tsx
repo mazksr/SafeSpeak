@@ -18,11 +18,6 @@ const SearchField = () => {
         replace(`${pathname}?${params.toString()}`)
     }, 400)
 
-    function clearSearch() {
-        params.delete("search")
-        replace(`${pathname}?${params.toString()}`)
-    }
-
     return (
         <form>
             <div className={"flex search"}>
