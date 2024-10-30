@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {Table, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 
 import HistoryTableBody from "@/app/admin/HistoryTableBody";
 import Loading from "@/app/components/Loading";
@@ -22,7 +22,7 @@ const HistoryTable = ({search}: { search: string }) => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <Suspense key={search} fallback={<Loading/>}>
+            <Suspense key={search} fallback={<TableBody><Loading/></TableBody>}>
                 <HistoryTableBody search={search}/>
             </Suspense>
         </Table>
