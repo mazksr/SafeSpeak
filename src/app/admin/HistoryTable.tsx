@@ -1,10 +1,10 @@
 import React, {Suspense} from 'react';
-import {Table, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 
 import Loading from "@/app/components/Loading";
 import HistoryTableBody from "@/app/admin/HistoryTableBody";
 
-const HistoryTable = ({search}: {search: string}) => {
+const HistoryTable = ({search}: { search: string }) => {
 
     return (
         <Table className="table-auto mt-5 overflow-y-hidden">
@@ -22,7 +22,7 @@ const HistoryTable = ({search}: {search: string}) => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <Suspense key={search} fallback={<Loading/>}>
+            <Suspense key={search} fallback={<TableBody><Loading/></TableBody>}>
                 <HistoryTableBody search={search}/>
             </Suspense>
         </Table>
