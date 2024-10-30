@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import {handleEdit} from "@/app/admin/Actions";
 import toast from "react-hot-toast";
+import {revalidatePath} from "next/cache";
 
 interface History {
     Id: number
@@ -60,6 +61,7 @@ const EditButton = (item: Prop) => {
         if (state.message && state.success) {
             toast.dismiss()
             toast.success("Berhasil mengubah")
+            revalidatePath("/admin")
         } else if (state.message && !state.success) {
             toast.dismiss()
             toast.error("Gagal mengubah")

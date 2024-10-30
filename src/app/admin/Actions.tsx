@@ -13,7 +13,6 @@ export async function handleDelete(id: number) {
         }
     })
     if (post.ok) {
-        console.log("ehhh")
         revalidatePath("/admin")
     }
 }
@@ -74,7 +73,6 @@ export async function handleEdit(prevState: State, formData: FormData) {
     }
 
     if (post.ok) {
-        revalidatePath("/admin")
         return {message: "success", success: true}
     }
     return {message: "fail", success: false}
