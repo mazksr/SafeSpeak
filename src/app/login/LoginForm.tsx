@@ -25,7 +25,7 @@ function LoginForm() {
         if (state.message && state.success) {
             toast.dismiss()
             toast.success("Logged in, redirecting...")
-            router.push("/history")
+            router.push("/admin")
         } else if ((state.message && !state.success) && !loading){
             toast.dismiss()
             toast.error("Log in failed")
