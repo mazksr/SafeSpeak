@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import Navbar from "@/app/components/Navbar";
 import HistoryTable from "@/app/admin/HistoryTable";
 
@@ -6,8 +6,6 @@ import type {Metadata} from 'next'
 import SearchField from "@/app/components/SearchField";
 import {TableBody} from "@/components/ui/table";
 import Loading from "@/app/components/Loading";
-import HistoryTableBody from "@/app/admin/HistoryTableBody";
-import {Suspense} from "types-react";
 
 export const metadata: Metadata = {
     title: 'SafeSpeak - History',
