@@ -61,7 +61,6 @@ const EditButton = (item: Prop) => {
         if (state.message && state.success) {
             toast.dismiss()
             toast.success("Berhasil mengubah")
-            revalidatePath("/admin")
         } else if (state.message && !state.success) {
             toast.dismiss()
             toast.error("Gagal mengubah")
