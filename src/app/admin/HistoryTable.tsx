@@ -38,6 +38,7 @@ const LABEL_COLUMNS = [
     'Ujaran Kebencian Sedang',     // Hateful Speech Sedang
     'Ujaran Kebencian Kuat'         // Hateful Speech Kuat
 ];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HistoryTable = async({search}: {search: string}) => {
     const url = `${process.env.API_URL}/history`;
     const cookie = (await cookies()).get("access_token");
