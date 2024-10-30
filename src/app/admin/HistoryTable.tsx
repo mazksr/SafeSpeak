@@ -49,7 +49,7 @@ const HistoryTable = async({search}: {search: string}) => {
         },
         cache: "no-store"
     })
-    const history: History[] = post.ok ? await post.json() : null;
+    const history: History[] = await post.json();
     const historyFiltered = history && history.filter(h => h.Komentar==search)
 
     return (
