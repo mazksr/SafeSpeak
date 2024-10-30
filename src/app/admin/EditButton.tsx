@@ -68,7 +68,6 @@ const EditButton = (item: Prop) => {
         }
     }, [loading]);
 
-    console.log(isPositive)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className={"h-8 w-24 bg-[#FAE599] rounded-lg"}>Edit</DialogTrigger>
@@ -96,7 +95,7 @@ const EditButton = (item: Prop) => {
 
                             <label htmlFor="sentimen" className={""}>Sentimen:</label>
                             <div className={"flex items-center"}>
-                                <select defaultValue={history.Komentar} id={"sentimen"} name={"Sentimen"}
+                                <select defaultValue={history.Sentimen} id={"sentimen"} name={"Sentimen"}
                                         onChange={e => setPositive(e.target.value == "Positive")}
                                         className="w-full mt-1 bg-white h-10 appearance-none border-2 border-gray-300 px-4">
                                     <option value={"Positive"}>Positive</option>
