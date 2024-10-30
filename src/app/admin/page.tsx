@@ -1,10 +1,9 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import Navbar from "@/app/components/Navbar";
 import HistoryTable from "@/app/admin/HistoryTable";
 
 import type {Metadata} from 'next'
 import SearchField from "@/app/components/SearchField";
-import Loading from "@/app/components/Loading";
 
 export const metadata: Metadata = {
     title: 'SafeSpeak - History',
@@ -38,11 +37,9 @@ const Page = async (props: { searchParams?: Promise<{ search?: string | ""; }> }
                         </svg>
                     </a>
                 </div>
-                <Suspense key={searchString} fallback={<Loading/>}>
-                    <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
-                        <HistoryTable search={searchString}/>
-                    </div>
-                </Suspense>
+                <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
+                    <HistoryTable search={searchString}/>
+                </div>
             </div>
 
         </div>
