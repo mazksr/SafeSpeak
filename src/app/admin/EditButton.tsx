@@ -49,7 +49,6 @@ const EditButton = (item: Prop) => {
     useEffect(() => {
         state.message = "";
         state.success = false;
-        setPositive(history.Sentimen == "Positive")
     }, [open]);
 
     useEffect(() => {
