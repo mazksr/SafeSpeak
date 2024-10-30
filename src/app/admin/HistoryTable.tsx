@@ -22,9 +22,7 @@ const HistoryTable = ({search}: { search: string }) => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <Suspense key={search} fallback={<TableBody><Loading/></TableBody>}>
-                <HistoryTableBody search={search}/>
-            </Suspense>
+            <HistoryTableBody search={search}/>
         </Table>
     );
 };

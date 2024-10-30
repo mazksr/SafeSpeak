@@ -2,14 +2,18 @@ import React from 'react';
 import Navbar from "@/app/components/Navbar";
 import HistoryTable from "@/app/admin/HistoryTable";
 
-import type { Metadata } from 'next'
+import type {Metadata} from 'next'
 import SearchField from "@/app/components/SearchField";
+import {TableBody} from "@/components/ui/table";
+import Loading from "@/app/components/Loading";
+import HistoryTableBody from "@/app/admin/HistoryTableBody";
+import {Suspense} from "types-react";
 
 export const metadata: Metadata = {
-  title: 'SafeSpeak - History',
+    title: 'SafeSpeak - History',
 }
 
-const Page = async(props: { searchParams?: Promise<{ search?: string | ""; }> }) => {
+const Page = async (props: { searchParams?: Promise<{ search?: string | ""; }> }) => {
     const searchPar = await props.searchParams
     const searchString = searchPar?.search || ""
 
@@ -22,7 +26,7 @@ const Page = async(props: { searchParams?: Promise<{ search?: string | ""; }> })
                         <SearchField/>
                     </div>
                     <a target="_blank" href={`${process.env.API_URL}/download-csv`}
-                        className="mr-4 lg:mr-24 cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:scale-110 animate-none">
+                       className="mr-4 lg:mr-24 cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:scale-110 animate-none">
                         <svg
                             className="w-5 h-5"
                             stroke="currentColor"
@@ -37,9 +41,11 @@ const Page = async(props: { searchParams?: Promise<{ search?: string | ""; }> })
                         </svg>
                     </a>
                 </div>
-                <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
-                    <HistoryTable search={searchString}/>
-                </div>
+                <Suspense key={searchString} fallback={<TableBody><Loading/></TableBody>}>
+                    <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
+                        <HistoryTable search={searchString}/>
+                    </div>
+                </Suspense>
             </div>
 
         </div>

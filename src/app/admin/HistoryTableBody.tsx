@@ -53,7 +53,7 @@ const HistoryTableBody = async ({search}: { search: string }) => {
 
     return (
         <TableBody>
-            {history && history.filter(h => h.Komentar.includes(search)).map((h, i) => {
+            {history && history.filter(h => h.Komentar.toLowerCase().includes(search.toLowerCase())).map((h, i) => {
                 const labels = [
                     h.HS ? LABEL_COLUMNS[0] : null,
                     h.Abusive ? LABEL_COLUMNS[1] : null,
