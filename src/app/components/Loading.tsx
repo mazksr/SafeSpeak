@@ -40,7 +40,4 @@ const Loading = () => {
     );
 };
 
-
-import ActionPopover from "@/app/admin/ActionPopover";
-
 export default Loading;
