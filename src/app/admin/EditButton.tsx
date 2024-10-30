@@ -49,6 +49,7 @@ const EditButton = (item: Prop) => {
     useEffect(() => {
         state.message = "";
         state.success = false;
+        setPositive(history.Sentimen == "Positive")
     }, [open]);
 
     useEffect(() => {
@@ -67,6 +68,7 @@ const EditButton = (item: Prop) => {
         }
     }, [loading]);
 
+    console.log(isPositive)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className={"h-8 w-24 bg-[#FAE599] rounded-lg"}>Edit</DialogTrigger>
