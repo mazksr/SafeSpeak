@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import {handleEdit} from "@/app/admin/Actions";
 import toast from "react-hot-toast";
-import {revalidatePath} from "next/cache";
 
 interface History {
     Id: number
