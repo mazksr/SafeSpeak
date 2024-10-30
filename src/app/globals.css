@@ -13,6 +13,17 @@
         -ms-overflow-style: none; /* IE and Edge */
         scrollbar-width: none; /* Firefox */
     }
+
+    .search {
+        padding-left: 0.8em;
+        padding-right: 0.8em;
+        height: 40px;
+        width: 280px;
+        outline: none;
+        border: 2px solid rgb(200, 200, 200);
+        background-color: transparent;
+        border-radius: 20px;
+    }
 }
 
 @layer base {

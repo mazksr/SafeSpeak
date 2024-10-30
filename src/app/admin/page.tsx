@@ -3,17 +3,24 @@ import Navbar from "@/app/components/Navbar";
 import HistoryTable from "@/app/admin/HistoryTable";
 
 import type { Metadata } from 'next'
+import SearchField from "@/app/components/SearchField";
 
 export const metadata: Metadata = {
   title: 'SafeSpeak - History',
 }
 
-const Page = () => {
+const Page = async({searchParams}: {searchParams?: { search?: string; } }) => {
+    const searchPar = await searchParams
+    const searchString = searchPar?.search || ""
+
     return (
         <div>
             <Navbar/>
             <div className={"mt-20 mb-16"}>
-                <div className={"flex justify-end"}>
+                <div className={"flex justify-between"}>
+                    <div className={"ml-4 lg:ml-24"}>
+                        <SearchField/>
+                    </div>
                     <a target="_blank" href={`${process.env.API_URL}/download-csv`}
                         className="mr-4 lg:mr-24 cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:scale-110 animate-none">
                         <svg
@@ -31,7 +38,7 @@ const Page = () => {
                     </a>
                 </div>
                 <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
-                    <HistoryTable/>
+                    <HistoryTable search={searchString}/>
                 </div>
             </div>
 
