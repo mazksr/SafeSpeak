@@ -50,7 +50,6 @@ const HistoryTable = async({search}: {search: string}) => {
         cache: "no-store"
     })
     const history: History[] = await post.json();
-    const historyFiltered = history && history.filter(h => h.Komentar==search)
 
     return (
         <Table className="table-auto mt-5 overflow-y-hidden">
@@ -68,9 +67,9 @@ const HistoryTable = async({search}: {search: string}) => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <Suspense key={historyFiltered ? historyFiltered.length : 0} fallback={<Loading/>}>
+            <Suspense key={history ? history.length : 0} fallback={<Loading/>}>
                 <TableBody>
-                    {historyFiltered && historyFiltered.map((h, i) => {
+                    {history && history.map((h, i) => {
                         const labels = [
                             h.HS ? LABEL_COLUMNS[0] : null,
                             h.Abusive ? LABEL_COLUMNS[1] : null,
