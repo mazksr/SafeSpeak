@@ -1,7 +1,6 @@
-import React, {Suspense} from 'react';
-import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import React from 'react';
+import {Table, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 
-import Loading from "@/app/components/Loading";
 import HistoryTableBody from "@/app/admin/HistoryTableBody";
 
 const HistoryTable = ({search}: { search: string }) => {

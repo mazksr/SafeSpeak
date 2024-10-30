@@ -72,11 +72,11 @@ export async function handleEdit(prevState: State, formData: FormData) {
             })
         })
     }
-    const response = await post.json()
+
     if (post.ok) {
         revalidatePath("/admin")
-        return {message: response.message, success: true}
+        return {message: "success", success: true}
     }
-    return {message: response.message, success: false}
+    return {message: "fail", success: false}
 
 }

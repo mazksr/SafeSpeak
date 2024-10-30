@@ -4,7 +4,6 @@ import HistoryTable from "@/app/admin/HistoryTable";
 
 import type {Metadata} from 'next'
 import SearchField from "@/app/components/SearchField";
-import {TableBody} from "@/components/ui/table";
 import Loading from "@/app/components/Loading";
 
 export const metadata: Metadata = {
@@ -39,7 +38,7 @@ const Page = async (props: { searchParams?: Promise<{ search?: string | ""; }> }
                         </svg>
                     </a>
                 </div>
-                <Suspense key={searchString} fallback={<TableBody><Loading/></TableBody>}>
+                <Suspense key={searchString} fallback={<Loading/>}>
                     <div className={"flex justify-center items-center w-full px-3 lg:px-20"}>
                         <HistoryTable search={searchString}/>
                     </div>

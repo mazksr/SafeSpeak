@@ -12,6 +12,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {handleDelete} from "@/app/admin/Actions";
+import toast from "react-hot-toast";
 
 interface Prop {
     id: number,
@@ -53,7 +54,14 @@ const DeleteButton = ({id, komentar}: Prop) => {
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild={true}>
-                        <button onClick={() => handleDelete(id)} className={"rounded-lg h-9 w-16 bg-[#FA9999]"}>Hapus</button>
+                        <button onClick={() => {
+                            toast.promise(handleDelete(id),
+                                {
+                                    loading: "Menghapus",
+                                    success: "Berhasil menghapus",
+                                    error: "Gagal menghapus"
+                                })
+                        }} className={"rounded-lg h-9 w-16 bg-[#FA9999]"}>Hapus</button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

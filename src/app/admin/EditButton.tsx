@@ -11,6 +11,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {handleEdit} from "@/app/admin/Actions";
+import toast from "react-hot-toast";
 
 interface History {
     Id: number
@@ -36,19 +37,34 @@ interface Prop {
 
 const intialState = {
     message: "",
-    success: true
+    success: false
 }
 
 const EditButton = (item: Prop) => {
-    const [state, formAction] = useActionState(handleEdit, intialState);
+    const [state, formAction, loading] = useActionState(handleEdit, intialState);
     const [open, setOpen] = useState(false)
     const history = item.history
     const [isPositive, setPositive] = useState(history.Sentimen == "Positive")
 
     useEffect(() => {
         state.message = "";
+        state.success = false;
         setPositive(history.Sentimen == "Positive")
     }, [history.Sentimen, open, state]);
+
+    useEffect(() => {
+        if (loading) {
+            toast.dismiss()
+            toast.loading("Menyimpan perubahan...")
+        }
+        if (state.message && state.success) {
+            toast.dismiss()
+            toast.success("Berhasil mengubah")
+        } else if (state.message && !state.success) {
+            toast.dismiss()
+            toast.error("Gagal mengubah")
+        }
+    }, [loading]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
