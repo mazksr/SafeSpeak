@@ -1,6 +1,6 @@
 from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from database import SessionLocal, get_db
 from enums import Sentiment
 from models import Komentar
 from schemas import KomentarCreate, KomentarResponse
@@ -35,8 +35,7 @@ def login(login_data: LoginRequest):
     return {"access_token": access_token, "token_type": "bearer"}
 
 @komentar_router.post("/predict")
-async def preditct(req: Request):
-    db = req.app.state.db
+async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
     request = await req.json()
     comment = request.get("comment")
     predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
@@ -63,7 +62,6 @@ async def preditct(req: Request):
         db_komentar = Komentar(**komentar_data.model_dump())
         db.add(db_komentar)
         db.commit()
-        db.refresh(db_komentar)
     except IntegrityError as e:
         if "Duplicate entry" in str(e.orig):
             print(f"Comment: \"{comment[:255]}\" already exists, skipping save")
@@ -74,7 +72,7 @@ async def preditct(req: Request):
 
 @komentar_router.get("/history", response_model=List[KomentarResponse])
 def read_komentars(
-    req: Request,
+    db: SessionLocal = Depends(get_db),
     username: str = Depends(verify_token),
     sentiment: Optional[Sentiment] = Query(None, description="Filter by Sentimen"),
     hs: Optional[bool] = Query(None, description="Filter by HS"),
@@ -93,8 +91,6 @@ def read_komentars(
     limit: int = Query(10, description="Limit results per page"),
     offset: int = Query(0, description="Offset for pagination"),
 ):
-    db: Session = req.app.state.db
-
     # Start with the base query
     query = db.query(Komentar)
 
@@ -131,13 +127,12 @@ def read_komentars(
         query = query.filter(Komentar.Komentar.contains(search_query))
 
     # Apply pagination
-    komentar_list = query.offset(offset).limit(limit).all()
+    komentar_list = query.offset(offset).limit(limit).all() if limit >0 else query.offset(offset).all()
 
     return komentar_list
 
 @komentar_router.delete("/history/{komentar_id}", response_model=dict)
-def delete_komentar(komentar_id: int, req: Request, username: str = Depends(verify_token)):
-    db = req.app.state.db
+def delete_komentar(komentar_id: int, db: SessionLocal = Depends(get_db), username: str = Depends(verify_token)):
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
     if not komentar:
         raise HTTPException(status_code=404, detail="Komentar not found")
@@ -146,8 +141,7 @@ def delete_komentar(komentar_id: int, req: Request, username: str = Depends(veri
     return {"message": f"Comment with id {komentar_id} has been deleted"}
 
 @komentar_router.put("/history/{komentar_id}", response_model=dict)
-async def update_komentar(req: Request, komentar_id: int, username: str = Depends(verify_token)):
-    db = req.app.state.db
+async def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Depends(get_db), username: str = Depends(verify_token)):
     request = await req.json()
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
 
@@ -179,8 +173,7 @@ async def update_komentar(req: Request, komentar_id: int, username: str = Depend
 
 
 @komentar_router.get("/download-csv")
-async def download_csv(req: Request, access_token: str = Cookie(None)):
-    db = req.app.state.db
+async def download_csv(db: SessionLocal = Depends(get_db), access_token: str = Cookie(None)):
     verify_token(access_token)
     # Step 1: Query the database
     komentar_list = db.query(Komentar).all()
