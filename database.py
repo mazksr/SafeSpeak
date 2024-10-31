@@ -1,7 +1,15 @@
+from dotenv import load_dotenv
+import os
+
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from models import Base, Komentar
-DATABASE_URL = "mysql://root:@localhost/"
+
+load_dotenv()
+DB_URL = os.getenv("DATABASE_URL")
+
+
+DATABASE_URL = f"{DB_URL}/"
 engine = create_engine(DATABASE_URL)
 
 # Create the database if it does not exist
@@ -9,7 +17,7 @@ with engine.connect() as connection:
     connection.execute(text("CREATE DATABASE IF NOT EXISTS db_safe_speak"))
     connection.execute(text("USE db_safe_speak"))
 
-DATABASE_URL = "mysql://root:@localhost/db_safe_speak"
+DATABASE_URL = f"{DB_URL}/db_safe_speak"
 engine = create_engine(DATABASE_URL)
 
 

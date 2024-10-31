@@ -1,7 +1,17 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import komentar_router
-app = FastAPI()
+from database import get_db
+from utils import load_model
+@asynccontextmanager
+async def lifespan(inner_app: FastAPI):
+    inner_app.state.db = next(get_db())
+    inner_app.state.tokenizer, inner_app.state.model = load_model("indobert-finetuned")
+    yield
+    print("Shutting down")
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

@@ -10,8 +10,7 @@ def load_model(model_path):
     model.to(device)
     return tokenizer, model
 
-def predict_text(text, model_path):
-    tokenizer, model = load_model(model_path)
+def predict_text(text, model, tokenizer):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.eval()
 

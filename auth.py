@@ -1,16 +1,20 @@
+import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 import jwt
 from datetime import datetime, timedelta
 
+load_dotenv()
 # Secret key to encode/decode JWT
-SECRET_KEY = "safeespeeakkk"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
-# Hardcoded credentials
-USERNAME = "admin"
-PASSWORD = "admin123"
+# Hardcoded credentials`
+USERNAME = os.getenv("LVALUE")
+PASSWORD = os.getenv("LPASS")
 
 # FastAPI application
 app = FastAPI()

@@ -1,7 +1,5 @@
 from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from database import get_db
 from models import Komentar
 from schemas import KomentarCreate, KomentarResponse
 from utils import predict_text
@@ -35,11 +33,11 @@ def login(login_data: LoginRequest):
     return {"access_token": access_token, "token_type": "bearer"}
 
 @komentar_router.post("/predict")
-async def preditct(req: Request, db: Session = Depends(get_db)):
+async def preditct(req: Request):
+    db = req.app.state.db
     request = await req.json()
     comment = request.get("comment")
-    model_path = './indobert-finetuned'
-    predicted_labels = predict_text(comment, model_path)
+    predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
     is_positive = True if sum(predicted_labels) == 0 else False
 
     komentar_data = KomentarCreate(
@@ -72,13 +70,15 @@ async def preditct(req: Request, db: Session = Depends(get_db)):
 
     return {"message": predicted_labels, "isPositive": is_positive}
 
-@komentar_router.get("/history/", response_model=List[KomentarResponse])
-def read_komentars(db: Session = Depends(get_db), username: str = Depends(verify_token)):
+@komentar_router.get("/history", response_model=List[KomentarResponse])
+def read_komentars(req: Request, username: str = Depends(verify_token)):
+    db = req.app.state.db
     komentar_list = db.query(Komentar).all()
     return komentar_list
 
 @komentar_router.delete("/history/{komentar_id}", response_model=dict)
-def delete_komentar(komentar_id: int, db: Session = Depends(get_db), username: str = Depends(verify_token)):
+def delete_komentar(komentar_id: int, req: Request, username: str = Depends(verify_token)):
+    db = req.app.state.db
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
     if not komentar:
         raise HTTPException(status_code=404, detail="Komentar not found")
@@ -87,7 +87,8 @@ def delete_komentar(komentar_id: int, db: Session = Depends(get_db), username: s
     return {"message": f"Comment with id {komentar_id} has been deleted"}
 
 @komentar_router.put("/history/{komentar_id}", response_model=dict)
-async def update_komentar(req: Request, komentar_id: int, db: Session = Depends(get_db), username: str = Depends(verify_token)):
+async def update_komentar(req: Request, komentar_id: int, username: str = Depends(verify_token)):
+    db = req.app.state.db
     request = await req.json()
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
 
@@ -119,7 +120,8 @@ async def update_komentar(req: Request, komentar_id: int, db: Session = Depends(
 
 
 @komentar_router.get("/download-csv")
-async def download_csv(db: Session = Depends(get_db), access_token: str = Cookie(None)):
+async def download_csv(req: Request, access_token: str = Cookie(None)):
+    db = req.app.state.db
     verify_token(access_token)
     # Step 1: Query the database
     komentar_list = db.query(Komentar).all()
