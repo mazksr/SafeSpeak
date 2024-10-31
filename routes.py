@@ -1,9 +1,11 @@
-from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response
+from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from enums import Sentiment
 from models import Komentar
 from schemas import KomentarCreate, KomentarResponse
 from utils import predict_text
-from typing import List
+from typing import List, Optional
 from auth import LoginRequest, USERNAME, PASSWORD, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, verify_token
 from datetime import timedelta
 import pandas as pd
@@ -71,9 +73,66 @@ async def preditct(req: Request):
     return {"message": predicted_labels, "isPositive": is_positive}
 
 @komentar_router.get("/history", response_model=List[KomentarResponse])
-def read_komentars(req: Request, username: str = Depends(verify_token)):
-    db = req.app.state.db
-    komentar_list = db.query(Komentar).all()
+def read_komentars(
+    req: Request,
+    username: str = Depends(verify_token),
+    sentiment: Optional[Sentiment] = Query(None, description="Filter by Sentimen"),
+    hs: Optional[bool] = Query(None, description="Filter by HS"),
+    abusive: Optional[bool] = Query(None, description="Filter by Abusive"),
+    hs_individual: Optional[bool] = Query(None, description="Filter by HS_Individual"),
+    hs_group: Optional[bool] = Query(None, description="Filter by HS_Group"),
+    hs_religion: Optional[bool] = Query(None, description="Filter by HS_Religion"),
+    hs_race: Optional[bool] = Query(None, description="Filter by HS_Race"),
+    hs_physical: Optional[bool] = Query(None, description="Filter by HS_Physical"),
+    hs_gender: Optional[bool] = Query(None, description="Filter by HS_Gender"),
+    hs_other: Optional[bool] = Query(None, description="Filter by HS_Other"),
+    hs_weak: Optional[bool] = Query(None, description="Filter by HS_Weak"),
+    hs_moderate: Optional[bool] = Query(None, description="Filter by HS_Moderate"),
+    hs_strong: Optional[bool] = Query(None, description="Filter by HS_Strong"),
+    search_query: Optional[str] = Query(None, description="Search term for Komentar text"),
+    limit: int = Query(10, description="Limit results per page"),
+    offset: int = Query(0, description="Offset for pagination"),
+):
+    db: Session = req.app.state.db
+
+    # Start with the base query
+    query = db.query(Komentar)
+
+    # Apply filters if provided
+    if sentiment:
+        query = query.filter(Komentar.Sentimen == sentiment)
+    if hs is not None:
+        query = query.filter(Komentar.HS == hs)
+    if abusive is not None:
+        query = query.filter(Komentar.Abusive == abusive)
+    if hs_individual is not None:
+        query = query.filter(Komentar.HS_Individual == hs_individual)
+    if hs_group is not None:
+        query = query.filter(Komentar.HS_Group == hs_group)
+    if hs_religion is not None:
+        query = query.filter(Komentar.HS_Religion == hs_religion)
+    if hs_race is not None:
+        query = query.filter(Komentar.HS_Race == hs_race)
+    if hs_physical is not None:
+        query = query.filter(Komentar.HS_Physical == hs_physical)
+    if hs_gender is not None:
+        query = query.filter(Komentar.HS_Gender == hs_gender)
+    if hs_other is not None:
+        query = query.filter(Komentar.HS_Other == hs_other)
+    if hs_weak is not None:
+        query = query.filter(Komentar.HS_Weak == hs_weak)
+    if hs_moderate is not None:
+        query = query.filter(Komentar.HS_Moderate == hs_moderate)
+    if hs_strong is not None:
+        query = query.filter(Komentar.HS_Strong == hs_strong)
+
+    # Apply text search if query is provided
+    if search_query:
+        query = query.filter(Komentar.Komentar.contains(search_query))
+
+    # Apply pagination
+    komentar_list = query.offset(offset).limit(limit).all()
+
     return komentar_list
 
 @komentar_router.delete("/history/{komentar_id}", response_model=dict)
