@@ -14,7 +14,6 @@ import {handleEdit} from "@/app/admin/Actions";
 import toast from "react-hot-toast";
 
 import "./admin.css"
-import {router} from "next/client";
 import {useRouter} from "next/navigation";
 
 interface History {
