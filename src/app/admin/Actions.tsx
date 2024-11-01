@@ -24,7 +24,7 @@ interface State {
 export async function handleEdit(prevState: State, formData: FormData) {
     const id = formData.get("id");
     const komentar = formData.get("komentar");
-    const isPositive = formData.get("Sentimen") == "Positive";
+    const isPositive = formData.get("Sentiment") === "Positive"
 
     let post: Response;
     const URL = `${process.env.API_URL}/history/${id}`;
@@ -73,7 +73,6 @@ export async function handleEdit(prevState: State, formData: FormData) {
     }
 
     if (post.ok) {
-        revalidatePath("/admin")
         return {message: "Berhasil", success: true}
     }
     return {message: "Gagal", success: false}

@@ -39,7 +39,7 @@ const LABEL_COLUMNS = [
 ];
 
 const HistoryTableBody = async ({search}: { search: string }) => {
-    const url = `${process.env.API_URL}/history`;
+    const url = `${process.env.API_URL}/history?limit=-1&search_query=${search}`;
     const cookie = (await cookies()).get("access_token");
     const post = await fetch(url, {
         method: "GET",
@@ -53,7 +53,7 @@ const HistoryTableBody = async ({search}: { search: string }) => {
 
     return (
         <TableBody>
-            {history && history.filter(h => h.Komentar.toLowerCase().includes(search.toLowerCase())).map((h, i) => {
+            {history && history.map((h, i) => {
                 const labels = [
                     h.HS ? LABEL_COLUMNS[0] : null,
                     h.Abusive ? LABEL_COLUMNS[1] : null,
