@@ -1,4 +1,3 @@
-import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,7 +7,6 @@ from utils import load_model
 async def lifespan(inner_app: FastAPI):
     inner_app.state.tokenizer, inner_app.state.model = load_model("indobert-finetuned")
     inner_app.state.model.eval()
-    inner_app.state.semaphore = asyncio.Semaphore(8)
     yield
     print("Shutting down")
 app = FastAPI(lifespan=lifespan)

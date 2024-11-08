@@ -1,3 +1,5 @@
+import asyncio
+from concurrent.futures import ProcessPoolExecutor
 from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query
 from sqlalchemy.exc import IntegrityError
 from database import SessionLocal, get_db
@@ -13,9 +15,12 @@ import io
 
 komentar_router = APIRouter()
 
+
 @komentar_router.get("/protected")
 def protected_route(username: str = Depends(verify_token)):
     return {"message": f"Hello, {username}. You have access to this protected route."}
+
+
 @komentar_router.post("/login")
 def login(login_data: LoginRequest):
     # Check if the username and password are correct
@@ -33,12 +38,22 @@ def login(login_data: LoginRequest):
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
 @komentar_router.post("/predict")
 async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
     request = await req.json()
     comment = request.get("comment")
-    async with req.app.state.semaphore:
-        predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
+
+    model = req.app.state.model
+    tokenizer = req.app.state.tokenizer
+
+    # Run `predict_text` in a separate process to avoid blocking the main thread
+    loop = asyncio.get_running_loop()
+    with ProcessPoolExecutor() as pool:
+        predicted_labels = await loop.run_in_executor(
+            pool, predict_text, comment, model, tokenizer
+        )
     is_positive = True if sum(predicted_labels) == 0 else False
 
     komentar_data = KomentarCreate(
@@ -70,26 +85,27 @@ async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
 
     return {"message": predicted_labels, "isPositive": is_positive}
 
+
 @komentar_router.get("/history", response_model=List[KomentarResponse])
 def read_komentars(
-    db: SessionLocal = Depends(get_db),
-    username: str = Depends(verify_token),
-    sentiment: Optional[Sentiment] = Query(None, description="Filter by Sentimen"),
-    hs: Optional[bool] = Query(None, description="Filter by HS"),
-    abusive: Optional[bool] = Query(None, description="Filter by Abusive"),
-    hs_individual: Optional[bool] = Query(None, description="Filter by HS_Individual"),
-    hs_group: Optional[bool] = Query(None, description="Filter by HS_Group"),
-    hs_religion: Optional[bool] = Query(None, description="Filter by HS_Religion"),
-    hs_race: Optional[bool] = Query(None, description="Filter by HS_Race"),
-    hs_physical: Optional[bool] = Query(None, description="Filter by HS_Physical"),
-    hs_gender: Optional[bool] = Query(None, description="Filter by HS_Gender"),
-    hs_other: Optional[bool] = Query(None, description="Filter by HS_Other"),
-    hs_weak: Optional[bool] = Query(None, description="Filter by HS_Weak"),
-    hs_moderate: Optional[bool] = Query(None, description="Filter by HS_Moderate"),
-    hs_strong: Optional[bool] = Query(None, description="Filter by HS_Strong"),
-    search_query: Optional[str] = Query(None, description="Search term for Komentar text"),
-    limit: int = Query(10, description="Limit results per page"),
-    offset: int = Query(0, description="Offset for pagination"),
+        db: SessionLocal = Depends(get_db),
+        username: str = Depends(verify_token),
+        sentiment: Optional[Sentiment] = Query(None, description="Filter by Sentimen"),
+        hs: Optional[bool] = Query(None, description="Filter by HS"),
+        abusive: Optional[bool] = Query(None, description="Filter by Abusive"),
+        hs_individual: Optional[bool] = Query(None, description="Filter by HS_Individual"),
+        hs_group: Optional[bool] = Query(None, description="Filter by HS_Group"),
+        hs_religion: Optional[bool] = Query(None, description="Filter by HS_Religion"),
+        hs_race: Optional[bool] = Query(None, description="Filter by HS_Race"),
+        hs_physical: Optional[bool] = Query(None, description="Filter by HS_Physical"),
+        hs_gender: Optional[bool] = Query(None, description="Filter by HS_Gender"),
+        hs_other: Optional[bool] = Query(None, description="Filter by HS_Other"),
+        hs_weak: Optional[bool] = Query(None, description="Filter by HS_Weak"),
+        hs_moderate: Optional[bool] = Query(None, description="Filter by HS_Moderate"),
+        hs_strong: Optional[bool] = Query(None, description="Filter by HS_Strong"),
+        search_query: Optional[str] = Query(None, description="Search term for Komentar text"),
+        limit: int = Query(10, description="Limit results per page"),
+        offset: int = Query(0, description="Offset for pagination"),
 ):
     # Start with the base query
     query = db.query(Komentar)
@@ -127,9 +143,10 @@ def read_komentars(
         query = query.filter(Komentar.Komentar.contains(search_query))
 
     # Apply pagination
-    komentar_list = query.offset(offset).limit(limit).all() if limit >0 else query.offset(offset).all()
+    komentar_list = query.offset(offset).limit(limit).all() if limit > 0 else query.offset(offset).all()
 
     return komentar_list
+
 
 @komentar_router.delete("/history/{komentar_id}", response_model=dict)
 def delete_komentar(komentar_id: int, db: SessionLocal = Depends(get_db), username: str = Depends(verify_token)):
@@ -140,8 +157,10 @@ def delete_komentar(komentar_id: int, db: SessionLocal = Depends(get_db), userna
     db.commit()
     return {"message": f"Comment with id {komentar_id} has been deleted"}
 
+
 @komentar_router.put("/history/{komentar_id}", response_model=dict)
-async def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Depends(get_db), username: str = Depends(verify_token)):
+async def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Depends(get_db),
+                          username: str = Depends(verify_token)):
     request = await req.json()
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
 
