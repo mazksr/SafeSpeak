@@ -7,6 +7,7 @@ from utils import load_model
 @asynccontextmanager
 async def lifespan(inner_app: FastAPI):
     inner_app.state.tokenizer, inner_app.state.model = load_model("indobert-finetuned")
+    inner_app.state.tokenizer.eval()
     inner_app.state.semaphore = asyncio.Semaphore(8)
     yield
     print("Shutting down")

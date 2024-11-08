@@ -12,7 +12,6 @@ def load_model(model_path):
 
 def predict_text(text, model, tokenizer):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model.eval()
 
     # Tokenize input
     inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=False).to(device)
