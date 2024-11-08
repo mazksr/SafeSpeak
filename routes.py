@@ -33,12 +33,12 @@ def login(login_data: LoginRequest):
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
-
 @komentar_router.post("/predict")
 async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
     request = await req.json()
     comment = request.get("comment")
-    predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
+    async with req.app.state.semaphore:
+        predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
     is_positive = True if sum(predicted_labels) == 0 else False
 
     komentar_data = KomentarCreate(
