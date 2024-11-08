@@ -46,10 +46,14 @@ def save_to_db(db:SessionLocal, komentar_data: KomentarCreate):
         db.add(db_komentar)
         db.commit()
     except IntegrityError as e:
+        db.rollback()  # Rollback the session to release the lock
         if "Duplicate entry" in str(e.orig):
             print(f"Comment: \"{komentar_data.Komentar}\" already exists, skipping save")
         else:
-            print(e)
+            print(f"An error occurred: {e}")
+    except Exception as e:
+        db.rollback()  # Rollback for any other exceptions
+        print(f"An error occurred: {e}")
 
 
 @komentar_router.post("/predict")
