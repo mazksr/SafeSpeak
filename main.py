@@ -5,10 +5,13 @@ from routes import komentar_router
 from utils import load_model
 @asynccontextmanager
 async def lifespan(inner_app: FastAPI):
-    inner_app.state.tokenizer, inner_app.state.model = load_model("indobert-finetuned")
-    inner_app.state.model.eval()
+    # Load the tokenizer and model once
+    if not hasattr(inner_app.state, "tokenizer"):
+        inner_app.state.tokenizer, inner_app.state.model = load_model("indobert-finetuned")
+        inner_app.state.model.eval()  # Set to evaluation mode
     yield
     print("Shutting down")
+
 app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
@@ -19,7 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include the routers
+# Include routers
 app.include_router(komentar_router)
 
-# Run the app using `uvicorn main:app --reload`
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=80)
