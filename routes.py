@@ -1,6 +1,4 @@
-import asyncio
-from concurrent.futures import ProcessPoolExecutor
-from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query
+from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query, BackgroundTasks
 from sqlalchemy.exc import IntegrityError
 from database import SessionLocal, get_db
 from enums import Sentiment
@@ -40,20 +38,23 @@ def login(login_data: LoginRequest):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+def save_to_db(db:SessionLocal, komentar_data: KomentarCreate):
+    try:
+        db_komentar = Komentar(**komentar_data.model_dump())
+        db.add(db_komentar)
+        db.commit()
+    except IntegrityError as e:
+        if "Duplicate entry" in str(e.orig):
+            print(f"Comment: \"{komentar_data.Komentar}\" already exists, skipping save")
+        else:
+            print(e)
+
+
 @komentar_router.post("/predict")
-async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
+async def preditct(req: Request, background_tasks: BackgroundTasks, db: SessionLocal = Depends(get_db)):
     request = await req.json()
     comment = request.get("comment")
-
-    model = req.app.state.model
-    tokenizer = req.app.state.tokenizer
-
-    # Run `predict_text` in a separate process to avoid blocking the main thread
-    loop = asyncio.get_running_loop()
-    with ProcessPoolExecutor() as pool:
-        predicted_labels = await loop.run_in_executor(
-            pool, predict_text, comment, model, tokenizer
-        )
+    predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
     is_positive = True if sum(predicted_labels) == 0 else False
 
     komentar_data = KomentarCreate(
@@ -73,15 +74,7 @@ async def preditct(req: Request, db: SessionLocal = Depends(get_db)):
         HS_Strong=bool(predicted_labels[11])
     )
 
-    try:
-        db_komentar = Komentar(**komentar_data.model_dump())
-        db.add(db_komentar)
-        db.commit()
-    except IntegrityError as e:
-        if "Duplicate entry" in str(e.orig):
-            print(f"Comment: \"{comment[:255]}\" already exists, skipping save")
-        else:
-            print(e)
+    background_tasks.add_task(save_to_db, db, komentar_data)
 
     return {"message": predicted_labels, "isPositive": is_positive}
 
