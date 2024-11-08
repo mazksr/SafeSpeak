@@ -1,3 +1,5 @@
+from asyncio import run
+
 from fastapi import Cookie, APIRouter, Request, Depends, HTTPException, status, Response, Query, BackgroundTasks
 from sqlalchemy.exc import IntegrityError
 from database import SessionLocal, get_db
@@ -51,8 +53,8 @@ def save_to_db(db:SessionLocal, komentar_data: KomentarCreate):
 
 
 @komentar_router.post("/predict")
-async def preditct(req: Request, background_tasks: BackgroundTasks, db: SessionLocal = Depends(get_db)):
-    request = await req.json()
+def preditct(req: Request, background_tasks: BackgroundTasks, db: SessionLocal = Depends(get_db)):
+    request = run(req.json())
     comment = request.get("comment")
     predicted_labels = predict_text(comment, req.app.state.model, req.app.state.tokenizer)
     is_positive = True if sum(predicted_labels) == 0 else False
