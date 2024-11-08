@@ -18,7 +18,7 @@ with engine.connect() as connection:
     connection.execute(text("USE db_safe_speak"))
 
 DATABASE_URL = f"{DB_URL}/db_safe_speak"
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, pool_size=35, max_overflow=15, pool_timeout=30, pool_recycle=3600)
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
