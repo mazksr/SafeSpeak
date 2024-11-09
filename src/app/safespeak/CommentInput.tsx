@@ -5,7 +5,6 @@ import 'regenerator-runtime/runtime';
 import SearchButton from "@/app/components/SearchButton";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
-import {useDebouncedCallback} from "use-debounce";
 
 interface Props {
     query: string
