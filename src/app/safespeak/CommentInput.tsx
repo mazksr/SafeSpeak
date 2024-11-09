@@ -34,7 +34,6 @@ const CommentInput = ({query}: Props) => {
 
     const submit = (comment: string) => {
         const url = pathName + "?" + createQueryString("c", comment);
-        router.prefetch(url);  // Just call prefetch without using the return value
         router.replace(url);
     }
 
@@ -70,6 +69,11 @@ const CommentInput = ({query}: Props) => {
     useEffect(() => {
         setValue(transcript)
     }, [transcript]);
+
+    useEffect(() => {
+        const url = pathName + "?" + createQueryString("c", value);
+        router.prefetch(url);
+    }, [value]);
 
     if (speechRecognitionSupported === null) return null // return null on first render, can be a loading indicator
 
