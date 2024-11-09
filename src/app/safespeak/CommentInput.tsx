@@ -70,11 +70,6 @@ const CommentInput = ({query}: Props) => {
         setValue(transcript)
     }, [transcript]);
 
-    useEffect(() => {
-        const url = pathName + "?" + createQueryString("c", value);
-        router.prefetch(url);
-    }, [value]);
-
     if (speechRecognitionSupported === null) return null // return null on first render, can be a loading indicator
 
     let speech_enabled: boolean;
