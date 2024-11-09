@@ -35,7 +35,7 @@ const CommentInput = ({query}: Props) => {
     const submit = (comment: string) => {
         const url = pathName + "?" + createQueryString("c", comment);
         router.prefetch(url);  // Just call prefetch without using the return value
-        router.push(url);
+        router.replace(url);
     }
 
     const handleCopy = (e: { preventDefault: () => void; }) => {
