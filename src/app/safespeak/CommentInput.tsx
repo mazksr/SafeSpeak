@@ -3,7 +3,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import 'regenerator-runtime/runtime';
 import SearchButton from "@/app/components/SearchButton";
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
 import {useDebouncedCallback} from "use-debounce";
 
@@ -13,10 +13,11 @@ interface Props {
 
 const CommentInput = ({query}: Props) => {
     const router = useRouter();
+    const searchParams = useSearchParams()
 
     const [value, setValue] = useState(query);
 
-    const params = new URLSearchParams(query)
+    const params = new URLSearchParams(searchParams)
 
     const pathName = usePathname();
     const clear = () => {
