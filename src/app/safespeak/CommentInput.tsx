@@ -75,11 +75,6 @@ const CommentInput = ({query}: Props) => {
         setValue(transcript)
     }, [transcript]);
 
-    const prefetchChange = useDebouncedCallback(() => {
-        const url = `${pathName}?${createQueryString("c", value)}`;
-        router.prefetch(url);
-    }, 400);
-
     if (speechRecognitionSupported === null) return null // return null on first render, can be a loading indicator
 
     let speech_enabled: boolean;
@@ -95,10 +90,7 @@ const CommentInput = ({query}: Props) => {
             <div className={"w-[300px] sm:w-[600px] md:w-[800px] h-[270px] border-2 border-black rounded-2xl"}>
                 <form className={"h-[180px] focus:outline-none w-full rounded-2xl"}>
                     <div className={"flex justify-between w-full h-full"}>
-                    <textarea value={value} onChange={(e) => {
-                        setValue(e.target.value);
-                        prefetchChange()
-                    }}
+                    <textarea value={value} onChange={(e) => setValue(e.target.value)}
                               placeholder={"Masukkan komentar yang ingin dicek"}
                               className={"resize-none focus:outline-none font-sans pt-8 pl-8 text-black h-full w-4/5 rounded-2xl"}/>
 
