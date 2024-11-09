@@ -15,18 +15,21 @@ const CommentInput = ({query}: Props) => {
 
     const [value, setValue] = useState(query);
 
-    const pathName = usePathname();
+    const params = new URLSearchParams(query.toString())
 
+    const pathName = usePathname();
     const clear = () => {
+
         setValue("");
 
     }
-
     const createQueryString = useCallback(
         (name: string, value: string) => {
-            const params = new URLSearchParams(query.toString())
-            params.set(name, value)
-
+            if (value) {
+                params.set(name, value)
+            } else {
+                params.delete(name)
+            }
             return params.toString()
         },
         [query]
