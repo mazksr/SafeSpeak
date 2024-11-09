@@ -10,9 +10,7 @@ interface Props {
     query: string
 }
 
-
-
-const CommentInput = ({query}:Props) => {
+const CommentInput = ({query}: Props) => {
     const router = useRouter();
 
     const [value, setValue] = useState(query);
@@ -25,17 +23,19 @@ const CommentInput = ({query}:Props) => {
     }
 
     const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(query.toString())
-      params.set(name, value)
+        (name: string, value: string) => {
+            const params = new URLSearchParams(query.toString())
+            params.set(name, value)
 
-      return params.toString()
-    },
-    [query]
-  )
+            return params.toString()
+        },
+        [query]
+    )
 
     const submit = (comment: string) => {
-        router.push(pathName + "?" + createQueryString("c", comment))
+        const url = pathName + "?" + createQueryString("c", comment);
+        router.prefetch(url);  // Just call prefetch without using the return value
+        router.push(url);
     }
 
     const handleCopy = (e: { preventDefault: () => void; }) => {

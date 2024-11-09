@@ -29,7 +29,6 @@ const badWords = [
 ];
 const allBadWords = badWords.join(" - ");
 
-
 export async function generateMetadata(props: { searchParams?: Promise<{ c?: string | ""; }> }): Promise<Metadata> {
     const searchParams = await props.searchParams;
     const comment = searchParams?.c ?? "";

@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect, useState, useActionState} from 'react';
+import React, {useEffect, useState, useActionState, useOptimistic} from 'react';
 import {
     Dialog,
     DialogContent,
@@ -14,9 +14,8 @@ import {handleEdit} from "@/app/admin/Actions";
 import toast from "react-hot-toast";
 
 import "./admin.css"
-import {useRouter} from "next/navigation";
 
-interface History {
+type History = {
     Id: number
     Komentar: string
     Sentimen: string
@@ -34,7 +33,7 @@ interface History {
     HS_Strong?: boolean
 }
 
-interface Prop {
+type Prop = {
     history: History
 }
 
@@ -44,10 +43,16 @@ const intialState = {
 }
 
 const EditButton = (item: Prop) => {
-    const router = useRouter()
+    const history = item.history
+    const [optimisticHistory, updateOptimisticHistory] = useOptimistic(
+        history,
+        (currentHistory, updatedFields: Partial<History>) => ({
+            ...currentHistory,
+            ...updatedFields,
+        })
+    );
     const [state, formAction, loading] = useActionState(handleEdit, intialState);
     const [open, setOpen] = useState(false)
-    const history = item.history
     const [isPositive, setPositive] = useState(history.Sentimen == "Positive")
 
     useEffect(() => {
@@ -66,17 +71,11 @@ const EditButton = (item: Prop) => {
         if (state.message && state.success) {
             toast.dismiss()
             toast.success("Berhasil mengubah")
-            router.refresh()
         } else if (state.message && !state.success) {
             toast.dismiss()
             toast.error("Gagal mengubah")
         }
     }, [loading]);
-
-    if (open) {
-        console.log(history.Sentimen)
-        console.log(isPositive)
-    }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -94,13 +93,34 @@ const EditButton = (item: Prop) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className={"flex justify-center items-center"}>
-                    <form action={formAction} className="flex flex-col w-full">
-                        <input defaultValue={history.Id} name={"id"} className={"invisible"}/>
-                        <label htmlFor="komentar" className={"mt-2"}>Komentar:</label>
+                    <form action={async (formData) => {
+                        const historyUpdate = {
+                            Id: Number(formData.get("id")),
+                            Komentar: formData.get("komentar") as string,
+                            Sentimen: formData.get("Sentiment") === "Positive" ? "Positive" : "Negative",
+                            HS: !!formData.get("HS"),
+                            Abusive: !!formData.get("Abusive"),
+                            HS_Individual: !!formData.get("HS_Individual"),
+                            HS_Group: !!formData.get("HS_Group"),
+                            HS_Religion: !!formData.get("HS_Religion"),
+                            HS_Race: !!formData.get("HS_Race"),
+                            HS_Physical: !!formData.get("HS_Physical"),
+                            HS_Gender: !!formData.get("HS_Gender"),
+                            HS_Other: !!formData.get("HS_Other"),
+                            HS_Weak: !!formData.get("HS_Weak"),
+                            HS_Moderate: !!formData.get("HS_Moderate"),
+                            HS_Strong: !!formData.get("HS_Strong"),
+                        };
+                        updateOptimisticHistory(historyUpdate);
+                        await formAction(formData)
+                    }} className="flex flex-col w-full">
+                        <input defaultValue={optimisticHistory.Id} name={"id"} className={"invisible"}/>
+                        <label htmlFor="komentar" className={"mt-2"}>Komentar:
+                        </label>
                         <textarea name="komentar" id="komentar"
                                   className="mt-1 resize-none w-full bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                                   placeholder="Komentar"
-                                  defaultValue={history.Komentar}/>
+                                  defaultValue={optimisticHistory.Komentar}/>
 
                         <label htmlFor="sentimen" className={""}>Sentimen:</label>
                         <div className={"flex items-center"}>
@@ -110,7 +130,7 @@ const EditButton = (item: Prop) => {
                                         type="radio"
                                         name="Sentiment"
                                         value="Positive"
-                                        checked={isPositive}
+                                        defaultChecked={isPositive}
                                         onChange={() => setPositive(true)}
                                     />
                                     <span className="name">Positive</span>
@@ -120,7 +140,7 @@ const EditButton = (item: Prop) => {
                                         type="radio"
                                         name="Sentiment"
                                         value="Negative"
-                                        checked={!isPositive}
+                                        defaultChecked={!isPositive}
                                         onChange={() => setPositive(false)}
                                     />
                                     <span className="name">Negative</span>
@@ -164,7 +184,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS"
                                                 value="HS"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS}
+                                                defaultChecked={optimisticHistory.HS}
                                             />
                                         </label>
 
@@ -182,7 +202,7 @@ const EditButton = (item: Prop) => {
                                                 name="Abusive"
                                                 value="Abusive"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.Abusive}
+                                                defaultChecked={optimisticHistory.Abusive}
                                             />
                                         </label>
 
@@ -200,7 +220,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Individual"
                                                 value="HS_Individual"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Individual}
+                                                defaultChecked={optimisticHistory.HS_Individual}
                                             />
                                         </label>
 
@@ -218,7 +238,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Group"
                                                 value="HS_Group"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Group}
+                                                defaultChecked={optimisticHistory.HS_Group}
                                             />
                                         </label>
 
@@ -236,7 +256,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Religion"
                                                 value="HS_Religion"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Religion}
+                                                defaultChecked={optimisticHistory.HS_Religion}
                                             />
                                         </label>
 
@@ -254,7 +274,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Race"
                                                 value="HS_Race"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Race}
+                                                defaultChecked={optimisticHistory.HS_Race}
                                             />
                                         </label>
 
@@ -272,7 +292,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Physical"
                                                 value="HS_Physical"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Physical}
+                                                defaultChecked={optimisticHistory.HS_Physical}
                                             />
                                         </label>
 
@@ -290,7 +310,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Gender"
                                                 value="HS_Gender"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Gender}
+                                                defaultChecked={optimisticHistory.HS_Gender}
                                             />
                                         </label>
 
@@ -308,7 +328,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Other"
                                                 value="HS_Other"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Other}
+                                                defaultChecked={optimisticHistory.HS_Other}
                                             />
                                         </label>
 
@@ -326,7 +346,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Weak"
                                                 value="HS_Weak"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Weak}
+                                                defaultChecked={optimisticHistory.HS_Weak}
                                             />
                                         </label>
 
@@ -344,7 +364,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Moderate"
                                                 value="HS_Moderate"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Moderate}
+                                                defaultChecked={optimisticHistory.HS_Moderate}
                                             />
                                         </label>
 
@@ -362,7 +382,7 @@ const EditButton = (item: Prop) => {
                                                 name="HS_Strong"
                                                 value="HS_Strong"
                                                 className="checked:border-indigo-500 h-5 w-5"
-                                                defaultChecked={history.HS_Strong}
+                                                defaultChecked={optimisticHistory.HS_Strong}
                                             />
                                         </label></div>}
                             </div>
@@ -375,11 +395,11 @@ const EditButton = (item: Prop) => {
                     </form>
                 </div>
                 <DialogFooter>
-                    {state.message && <p className={"font-bold text-black "}>{state.message}</p>}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    );
+    )
+        ;
 };
 
 export default EditButton;

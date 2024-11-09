@@ -46,7 +46,7 @@ const PredictOutput = async ({query}: Props) => {
 
     return (
         <div>
-            {query && <div className={"w-[280px] sm:w-[580px] md:w-[780px] mt-6 ml-4 font-bold font-sans text-lg"}>
+            {query && <div className={"mt-6 ml-4 font-bold font-sans text-lg"}>
                 {isPositive ? <p className={"text-green-500"}>Tidak Termasuk Komentar Negatif</p> : <div>
                     <p className={"text-red-500"}>Komen Negatif</p>
                     <div className={"max-w-[780px]"}>

@@ -78,10 +78,10 @@ const HistoryTableBody = async ({search}: { search: string }) => {
                             <div>
                                 <div className={"flex justify-center items-center"}>
                                     <div className={"mr-1"}>
-                                        <EditButton history={h}/>
+                                        <EditButton key={h.Id} history={h}/>
                                     </div>
                                     <div className={"ml-1"}>
-                                        <DeleteButton id={h.Id} komentar={h.Komentar}/>
+                                        <DeleteButton key={h.Id} id={h.Id} komentar={h.Komentar}/>
                                     </div>
                                 </div>
                             </div>

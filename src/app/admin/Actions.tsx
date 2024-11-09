@@ -73,6 +73,7 @@ export async function handleEdit(prevState: State, formData: FormData) {
     }
 
     if (post.ok) {
+        revalidatePath("/admin")
         return {message: "Berhasil", success: true}
     }
     return {message: "Gagal", success: false}
