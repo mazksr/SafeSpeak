@@ -19,8 +19,6 @@ komentar_router = APIRouter()
 @komentar_router.get("/protected")
 def protected_route(username: str = Depends(verify_token)):
     return {"message": f"Hello, {username}. You have access to this protected route."}
-
-
 @komentar_router.post("/login")
 def login(login_data: LoginRequest):
     # Check if the username and password are correct
@@ -158,9 +156,9 @@ def delete_komentar(komentar_id: int, db: SessionLocal = Depends(get_db), userna
 
 
 @komentar_router.put("/history/{komentar_id}", response_model=dict)
-async def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Depends(get_db),
+def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Depends(get_db),
                           username: str = Depends(verify_token)):
-    request = await req.json()
+    request = run(req.json())
     komentar = db.query(Komentar).filter(Komentar.Id == komentar_id).first()
 
     if not komentar:
@@ -191,7 +189,7 @@ async def update_komentar(req: Request, komentar_id: int, db: SessionLocal = Dep
 
 
 @komentar_router.get("/download-csv")
-async def download_csv(db: SessionLocal = Depends(get_db), access_token: str = Cookie(None)):
+def download_csv(db: SessionLocal = Depends(get_db), access_token: str = Cookie(None)):
     verify_token(access_token)
     # Step 1: Query the database
     komentar_list = db.query(Komentar).all()
