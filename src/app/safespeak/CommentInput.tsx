@@ -119,7 +119,9 @@ const CommentInput = ({query}: Props) => {
                                 </button>}
 
                             <button
-                                className={`mt-4 ${listening && "animate-bounce animate-infinite animate-ease-out"} ${!speech_enabled && "hidden"}`}
+                                className={`mt-4 ${listening && "animate-bounce animate-infinite animate-ease-out"} ${!speech_enabled && "opacity-20 cursor-not-allowed"}`}
+                                disabled={!speech_enabled}
+                                title={!speech_enabled ? "Fitur speech-to-text hanya didukung oleh browser berbasis Chromium, Safari 14.1+, Android Webview, dan Samsung Internet Browser." : ""}
                                 onClick={e => {
                                     e.preventDefault();
                                     if (!listening) {

@@ -70,7 +70,7 @@ const Page = async(props: { searchParams?: Promise<{ c?: string | ""; }> }) => {
                         <CommentInput query={comment}/>
                         <Suspense key={comment}
                                   fallback={<p className={"text-black text-lg font-bold font-sans mt-8"}>Loading
-                                      Classification</p>}>
+                                      Classification...</p>}>
                             <PredictOutput query={comment}/>
                         </Suspense>
                     </div>
