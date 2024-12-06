@@ -22,7 +22,7 @@ Permintaan harus dikirim dalam format JSON dengan field berikut:
 
 ## Struktur Respons
 Respons akan berisi hasil prediksi dalam bentuk JSON dengan dua bagian utama:
-1. message: Array nilai prediksi untuk setiap label.
+1. message: Array nilai prediksi untuk setiap label (0 untuk false, 1 untuk true).
 2. isPositive: Boolean yang menunjukkan apakah komentar bersifat positif atau tidak.
 
 Contoh Respons:
