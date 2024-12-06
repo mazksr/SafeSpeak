@@ -17,7 +17,8 @@ Permintaan harus dikirim dalam format JSON dengan field berikut:
 ```json
 {
   "comment": "Teks komentar yang ingin diprediksi"
-}```
+}
+```
 
 ## Struktur Respons
 Respons akan berisi hasil prediksi dalam bentuk JSON dengan dua bagian utama:
@@ -42,7 +43,8 @@ Contoh Respons:
     0.0
   ],
   "isPositive": false
-}```
+}
+```
 
 ### Label Klasifikasi
 
